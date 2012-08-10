@@ -295,8 +295,8 @@ literal_begin (['\"])
  /* Rather, the parser will grab it out of the global. */
   var g_parse_mode = 1; //AG: tmp
   var PROGRAM = 1;      //AG: tmp
-  var clear_doctext = function() { console.log("clearing doctext"); }; //AG: tmp
-  var clean_up_doctext = function(g_doctext) { console.log("cleaning up doctext: "+g_doctext); }; //AG: tmp
+  var clear_doctext = function() { util.debug_log("clearing doctext"); }; //AG: tmp
+  var clean_up_doctext = function(g_doctext) { util.debug_log("cleaning up doctext: "+g_doctext); }; //AG: tmp
   if (g_parse_mode == PROGRAM) {
     clear_doctext();
     g_doctext = yytext.substr(3, yytext.length - 5);

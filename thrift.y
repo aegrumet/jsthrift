@@ -36,19 +36,19 @@
 Program:
   HeaderList DefinitionList
     {
-      console.log("Program -> Headers DefinitionList");
+      util.debug_log("Program -> Headers DefinitionList");
     }
     ;
 
 CaptureDocText:
     {
-      console.log("CaptureDocText");
+      util.debug_log("CaptureDocText");
     }
     ;
 
 DestroyDocText:
     {
-      console.log("DestroyDocText");
+      util.debug_log("DestroyDocText");
     }
     ;
 
@@ -57,103 +57,103 @@ DestroyDocText:
 HeaderList:
   HeaderList Header
     {
-      console.log("HeaderList -> HeaderList Header");
+      util.debug_log("HeaderList -> HeaderList Header");
     }
 |
     {
-      console.log("HeaderList -> ");
+      util.debug_log("HeaderList -> ");
     }
     ;
 
 Header:
   Include
     {
-      console.log("Header -> Include");
+      util.debug_log("Header -> Include");
     }
 | tok_namespace tok_identifier tok_identifier
     {
-      console.log("Header -> tok_namespace tok_identifier tok_identifier");
+      util.debug_log("Header -> tok_namespace tok_identifier tok_identifier");
       yy.g_program.set_namespace($2, $3);
     }
 | tok_namespace '*' tok_identifier
     {
-      console.log("Header -> tok_namespace * tok_identifier");
+      util.debug_log("Header -> tok_namespace * tok_identifier");
       yy.g_program.set_namespace("*", $3);
     }
 /* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_cpp_namespace tok_identifier
     {
-      console.log("Header -> tok_cpp_namespace tok_identifier");
+      util.debug_log("Header -> tok_cpp_namespace tok_identifier");
       yy.g_program.set_namespace("cpp", $2);
     }
 | tok_cpp_include tok_literal
     {
-      console.log("Header -> tok_cpp_include tok_literal");
+      util.debug_log("Header -> tok_cpp_include tok_literal");
       yy.g_program.add_cpp_include($2);
     }
 | tok_php_namespace tok_identifier
     {
-      console.log("Header -> tok_php_namespace tok_identifier");
+      util.debug_log("Header -> tok_php_namespace tok_identifier");
       yy.g_program.set_namespace("php", $2);
     }
 /* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_py_module tok_identifier
     {
-      console.log("Header -> tok_py_module tok_identifier");
+      util.debug_log("Header -> tok_py_module tok_identifier");
       yy.g_program.set_namespace("py", $2);
     }
 /* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_perl_package tok_identifier
     {
-      console.log("Header -> tok_perl_namespace tok_identifier");
+      util.debug_log("Header -> tok_perl_namespace tok_identifier");
       yy.g_program.set_namespace("perl", $2);
     }
 /* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_ruby_namespace tok_identifier
     {
-      console.log("Header -> tok_ruby_namespace tok_identifier");
+      util.debug_log("Header -> tok_ruby_namespace tok_identifier");
       yy.g_program.set_namespace("rb", $2);
     }
 /* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_smalltalk_category tok_st_identifier
     {
-      console.log("Header -> tok_smalltalk_category tok_st_identifier");
+      util.debug_log("Header -> tok_smalltalk_category tok_st_identifier");
       yy.g_program.set_namespace("smalltalk.category", $2);
     }
 /* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_smalltalk_prefix tok_identifier
     {
-      console.log("Header -> tok_smalltalk_prefix tok_identifier");
+      util.debug_log("Header -> tok_smalltalk_prefix tok_identifier");
       yy.g_program.set_namespace("smalltalk.prefix", $2);
     }
 /* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_java_package tok_identifier
     {
-      console.log("Header -> tok_java_package tok_identifier");
+      util.debug_log("Header -> tok_java_package tok_identifier");
       yy.g_program.set_namespace("java", $2);
     }
 /* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_cocoa_prefix tok_identifier
     {
-      console.log("Header -> tok_cocoa_prefix tok_identifier");
+      util.debug_log("Header -> tok_cocoa_prefix tok_identifier");
       yy.g_program.set_namespace("cocoa", $2);
     }
 /* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_xsd_namespace tok_literal
     {
-      console.log("Header -> tok_xsd_namespace tok_literal");
+      util.debug_log("Header -> tok_xsd_namespace tok_literal");
       yy.g_program.set_namespace("xsd", $2);
     }
 /* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_csharp_namespace tok_identifier
    {
-     console.log("Header -> tok_csharp_namespace tok_identifier");
+     util.debug_log("Header -> tok_csharp_namespace tok_identifier");
      yy.g_program.set_namespace("csharp", $2);
    }
 /* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_delphi_namespace tok_identifier
    {
-     console.log("Header -> tok_delphi_namespace tok_identifier");
+     util.debug_log("Header -> tok_delphi_namespace tok_identifier");
      yy.g_program.set_namespace("delphi", $2);
    }
     ;
@@ -161,7 +161,7 @@ Header:
 Include:
   tok_include tok_literal
     {
-      console.log("Include -> tok_include tok_literal");
+      util.debug_log("Include -> tok_include tok_literal");
       yy.g_program.add_include($2);
     }
     ;
@@ -169,32 +169,32 @@ Include:
 DefinitionList:
   DefinitionList CaptureDocText Definition
     {
-      console.log("DefinitionList -> DefinitionList Definition");
+      util.debug_log("DefinitionList -> DefinitionList Definition");
       if ($2 !== null && $3 !== null) {
       }
     }
 |
     {
-      console.log("DefinitionList -> ");
+      util.debug_log("DefinitionList -> ");
     }
     ;
 
 Definition:
   Const
     {
-      console.log("Definition -> Const");
+      util.debug_log("Definition -> Const");
       yy.g_program.add_const($1);
       $$ = 1;
     }
 | TypeDefinition
     {
-      console.log("Definition -> TypeDefinition");
+      util.debug_log("Definition -> TypeDefinition");
       yy.g_scope.add_type($1.get_name(), $1);
       $$ = $1;
     }
 | Service
     {
-      console.log("Definition -> Service");
+      util.debug_log("Definition -> Service");
       yy.g_scope.add_service($1.get_name(), $1);
       yy.g_program.add_service($1);
       $$ = $1;
@@ -204,27 +204,27 @@ Definition:
 TypeDefinition:
   Typedef
     {
-      console.log("TypeDefinition -> Typedef");
+      util.debug_log("TypeDefinition -> Typedef");
       yy.g_program.add_typedef($1);
     }
 | Enum
     {
-      console.log("TypeDefinition -> Enum");
+      util.debug_log("TypeDefinition -> Enum");
       yy.g_program.add_enum($1);
     }
 | Senum
     {
-      console.log("TypeDefinition -> Senum");
+      util.debug_log("TypeDefinition -> Senum");
       yy.g_program.add_typedef($1);
     }
 | Struct
     {
-      console.log("TypeDefinition -> Struct");
+      util.debug_log("TypeDefinition -> Struct");
       yy.g_program.add_struct($1);
     }
 | Xception
     {
-      console.log("TypeDefinition -> Xception");
+      util.debug_log("TypeDefinition -> Xception");
       yy.g_program.add_xception($1);
     }
     ;
@@ -232,7 +232,7 @@ TypeDefinition:
 Typedef:
   tok_typedef FieldType tok_identifier
     {
-      console.log("TypeDef -> tok_typedef FieldType tok_identifier");
+      util.debug_log("TypeDef -> tok_typedef FieldType tok_identifier");
       var td = new t_typedef(yy.g_program, $2, $3);
       $$ = td;
     }
@@ -250,7 +250,7 @@ CommaOrSemicolonOptional:
 Enum:
   tok_enum tok_identifier '{' EnumDefList '}'
     {
-      console.log("Enum -> tok_enum tok_identifier { EnumDefList }");
+      util.debug_log("Enum -> tok_enum tok_identifier { EnumDefList }");
       $$ = $4;
       $$.set_name($2);
     }
@@ -259,13 +259,13 @@ Enum:
 EnumDefList:
   EnumDefList EnumDef
     {
-      console.log("EnumDefList -> EnumDefList EnumDef");
+      util.debug_log("EnumDefList -> EnumDefList EnumDef");
       $$ = $1;
       $$.append($2);
     }
 |
     {
-      console.log("EnumDefList -> ");
+      util.debug_log("EnumDefList -> ");
       $$ = new t_enum(yy.g_program);
     }
     ;
@@ -273,13 +273,13 @@ EnumDefList:
 EnumDef:
   CaptureDocText tok_identifier '=' tok_int_constant CommaOrSemicolonOptional
     {
-      console.log("EnumDef -> tok_identifier = tok_int_constant");
+      util.debug_log("EnumDef -> tok_identifier = tok_int_constant");
       $$ = new t_enum_value($2, $4);
     }
 |
   CaptureDocText tok_identifier CommaOrSemicolonOptional
     {
-      console.log("EnumDef -> tok_identifier");
+      util.debug_log("EnumDef -> tok_identifier");
       $$ = new t_enum_value($2);
     }
     ;
@@ -287,7 +287,7 @@ EnumDef:
 Senum:
   tok_senum tok_identifier '{' SenumDefList '}'
     {
-      console.log("Senum -> tok_senum tok_identifier { SenumDefList }");
+      util.debug_log("Senum -> tok_senum tok_identifier { SenumDefList }");
       $$ = new t_typedef(yy.g_program, $4, $2);
     }
     ;
@@ -295,13 +295,13 @@ Senum:
 SenumDefList:
   SenumDefList SenumDef
     {
-      console.log("SenumDefList -> SenumDefList SenumDef");
+      util.debug_log("SenumDefList -> SenumDefList SenumDef");
       $$ = $1;
       $$.add_string_enum_val($2);
     }
 |
     {
-      console.log("SenumDefList -> ");
+      util.debug_log("SenumDefList -> ");
       $$ = new t_base_type("string", t_base_type.t_base_name.TYPE_STRING);
       $$.set_string_enum(true);
     }
@@ -310,7 +310,7 @@ SenumDefList:
 SenumDef:
   tok_literal CommaOrSemicolonOptional
     {
-      console.log("SenumDef -> tok_literal");
+      util.debug_log("SenumDef -> tok_literal");
       $$ = 1;
     }
     ;
@@ -318,7 +318,7 @@ SenumDef:
 Const:
   tok_const FieldType tok_identifier '=' ConstValue CommaOrSemicolonOptional
     {
-      console.log("Const -> tok_const FieldType tok_identifier = ConstValue");
+      util.debug_log("Const -> tok_const FieldType tok_identifier = ConstValue");
       $$ = new yy.t_const($2, $3, $5);
     }
     ;
@@ -336,23 +336,23 @@ ConstValue:
     }
 | tok_literal
     {
-      console.log("ConstValue => tok_literal");
+      util.debug_log("ConstValue => tok_literal");
       $$ = new t_const_value($1);
     }
 | tok_identifier
     {
-      console.log("ConstValue => tok_identifier");
+      util.debug_log("ConstValue => tok_identifier");
       $$ = new t_const_value();
       $$.set_identifier($1);
     }
 | ConstList
     {
-      console.log("ConstValue => ConstList");
+      util.debug_log("ConstValue => ConstList");
       $$ = $1;
     }
 | ConstMap
     {
-      console.log("ConstValue => ConstMap");
+      util.debug_log("ConstValue => ConstMap");
       $$ = $1;
     }
     ;
@@ -360,7 +360,7 @@ ConstValue:
 ConstList:
   '[' ConstListContents ']'
     {
-      console.log("ConstList => [ ConstListContents ]");
+      util.debug_log("ConstList => [ ConstListContents ]");
       $$ = $2;
     }
     ;
@@ -368,13 +368,13 @@ ConstList:
 ConstListContents:
   ConstListContents ConstValue CommaOrSemicolonOptional
     {
-      console.log("ConstListContents => ConstListContents ConstValue CommaOrSemicolonOptional");
+      util.debug_log("ConstListContents => ConstListContents ConstValue CommaOrSemicolonOptional");
       $$ = $1;
       $$.add_list($2);
     }
 |
     {
-      console.log("ConstListContents =>");
+      util.debug_log("ConstListContents =>");
       $$ = new t_const_value();
       $$.set_list();
     }
@@ -383,7 +383,7 @@ ConstListContents:
 ConstMap:
   '{' ConstMapContents '}'
     {
-      console.log("ConstMap => { ConstMapContents }");
+      util.debug_log("ConstMap => { ConstMapContents }");
       $$ = $2;
     }
     ;
@@ -391,13 +391,13 @@ ConstMap:
 ConstMapContents:
   ConstMapContents ConstValue ':' ConstValue CommaOrSemicolonOptional
     {
-      console.log("ConstMapContents => ConstMapContents ConstValue CommaOrSemicolonOptional");
+      util.debug_log("ConstMapContents => ConstMapContents ConstValue CommaOrSemicolonOptional");
       $$ = $1;
       $$.add_map($2, $4);
     }
 |
     {
-      console.log("ConstMapContents =>");
+      util.debug_log("ConstMapContents =>");
       $$ = new t_const_value();
       $$.set_map();
     }
@@ -415,7 +415,7 @@ StructHead:
 Struct:
   StructHead tok_identifier XsdAll '{' FieldList '}' TypeAnnotations
     {
-      console.log("Struct -> tok_struct tok_identifier { FieldList }");
+      util.debug_log("Struct -> tok_struct tok_identifier { FieldList }");
 //      $5.set_xsd_all($3);
       $$ = $5;
       $$.set_name($2);
@@ -469,7 +469,7 @@ XsdAttributes:
 Xception:
   tok_xception tok_identifier '{' FieldList '}'
     {
-      console.log("Xception -> tok_xception tok_identifier { FieldList }");
+      util.debug_log("Xception -> tok_xception tok_identifier { FieldList }");
       $4.set_name($2);
       $4.set_xception(true);
       $$ = $4;
@@ -479,7 +479,7 @@ Xception:
 Service:
   tok_service tok_identifier Extends '{' FlagArgs FunctionList UnflagArgs '}'
     {
-      console.log("Service -> tok_service tok_identifier { FunctionList }");
+      util.debug_log("Service -> tok_service tok_identifier { FunctionList }");
       $$ = $6;
       $$.set_name($2);
       $$.set_extends($3);
@@ -488,20 +488,20 @@ Service:
 
 FlagArgs:
     {
-      console.log("FlagArgs");
+      util.debug_log("FlagArgs");
     }
     ;
 
 UnflagArgs:
     {
-      console.log("UnflagArgs");
+      util.debug_log("UnflagArgs");
     }
     ;
 
 Extends:
   tok_extends tok_identifier
     {
-      console.log("Extends -> tok_extends tok_identifier");
+      util.debug_log("Extends -> tok_extends tok_identifier");
     }
 |
     {
@@ -511,13 +511,13 @@ Extends:
 FunctionList:
   FunctionList Function
     {
-      console.log("FunctionList -> FunctionList Function");
+      util.debug_log("FunctionList -> FunctionList Function");
       $$ = $1;
       $1.add_function($2);
     }
 |
     {
-      console.log("FunctionList -> ");
+      util.debug_log("FunctionList -> ");
       $$ = new t_service(yy.g_program);
     }
     ;
@@ -535,7 +535,7 @@ Function:
 Oneway:
   tok_oneway
     {
-      console.log("Oneway");
+      util.debug_log("Oneway");
       $$ = true;
     }
     ;
@@ -543,7 +543,7 @@ Oneway:
 Throws:
   tok_throws '(' FieldList ')'
     {
-      console.log("Throws -> tok_throws ( FieldList )");
+      util.debug_log("Throws -> tok_throws ( FieldList )");
     }
 |
     {
@@ -553,13 +553,13 @@ Throws:
 FieldList:
   FieldList Field
     {
-      console.log("FieldList -> FieldList , Field");
+      util.debug_log("FieldList -> FieldList , Field");
       $$ = $1;
       $$.append($2);
     }
 |
     {
-      console.log("FieldList -> ");
+      util.debug_log("FieldList -> ");
       $$ = new t_struct(yy.g_program);
     }
     ;
@@ -567,9 +567,9 @@ FieldList:
 Field:
   CaptureDocText FieldIdentifier FieldRequiredness FieldType tok_identifier FieldValue XsdOptional XsdNillable XsdAttributes TypeAnnotations CommaOrSemicolonOptional
     {
-      console.log("tok_int_constant : Field -> FieldType tok_identifier");
-      console.log("field value literal " + $6);
-      console.log("yy.lval: "+yy.lval);
+      util.debug_log("tok_int_constant : Field -> FieldType tok_identifier");
+      util.debug_log("field value literal " + $6);
+      util.debug_log("yy.lval: "+yy.lval);
       $$ = new t_field($4, $5, $2.value);
       $$.set_req($3);
     }
@@ -601,7 +601,7 @@ FieldRequiredness:
 FieldValue:
   '=' ConstValue
     {
-    console.log("Field value with const value " + $2);
+    util.debug_log("Field value with const value " + $2);
     $$ = $2;
     }
 |
@@ -612,35 +612,35 @@ FieldValue:
 FunctionType:
   FieldType
     {
-      console.log("FunctionType -> FieldType");
+      util.debug_log("FunctionType -> FieldType");
       $$ = $1;
     }
 | tok_void
     {
-      console.log("FunctionType -> tok_void");
+      util.debug_log("FunctionType -> tok_void");
     }
     ;
 
 FieldType:
   tok_identifier
     {
-      console.log("FieldType -> tok_identifier");
+      util.debug_log("FieldType -> tok_identifier");
     }
 | BaseType
     {
-      console.log("FieldType -> BaseType");
+      util.debug_log("FieldType -> BaseType");
       $$ = $1;
     }
 | ContainerType
     {
-      console.log("FieldType -> ContainerType");
+      util.debug_log("FieldType -> ContainerType");
       $$ = $1;
     }
     ;
 
 BaseType: SimpleBaseType TypeAnnotations
     {
-      console.log("BaseType -> SimpleBaseType TypeAnnotations");
+      util.debug_log("BaseType -> SimpleBaseType TypeAnnotations");
       if ($2 !== null) {
           $$ = new t_base_type($1);
       } else {
@@ -652,45 +652,45 @@ BaseType: SimpleBaseType TypeAnnotations
 SimpleBaseType:
   tok_string
     {
-      console.log("BaseType -> tok_string");
+      util.debug_log("BaseType -> tok_string");
     }
 | tok_binary
     {
-      console.log("BaseType -> tok_binary");
+      util.debug_log("BaseType -> tok_binary");
     }
 | tok_slist
     {
-      console.log("BaseType -> tok_slist");
+      util.debug_log("BaseType -> tok_slist");
     }
 | tok_bool
     {
-      console.log("BaseType -> tok_bool");
+      util.debug_log("BaseType -> tok_bool");
     }
 | tok_byte
     {
-      console.log("BaseType -> tok_byte");
+      util.debug_log("BaseType -> tok_byte");
     }
 | tok_i16
     {
-      console.log("BaseType -> tok_i16");
+      util.debug_log("BaseType -> tok_i16");
     }
 | tok_i32
     {
-      console.log("BaseType -> tok_i32");
+      util.debug_log("BaseType -> tok_i32");
     }
 | tok_i64
     {
-      console.log("BaseType -> tok_i64");
+      util.debug_log("BaseType -> tok_i64");
     }
 | tok_double
     {
-      console.log("BaseType -> tok_double");
+      util.debug_log("BaseType -> tok_double");
     }
     ;
 
 ContainerType: SimpleContainerType TypeAnnotations
     {
-      console.log("ContainerType -> SimpleContainerType TypeAnnotations");
+      util.debug_log("ContainerType -> SimpleContainerType TypeAnnotations");
       $$ = $1;
     }
     ;
@@ -698,16 +698,16 @@ ContainerType: SimpleContainerType TypeAnnotations
 SimpleContainerType:
   MapType
     {
-      console.log("SimpleContainerType -> MapType");
+      util.debug_log("SimpleContainerType -> MapType");
       $$ = $1;
     }
 | SetType
     {
-      console.log("SimpleContainerType -> SetType");
+      util.debug_log("SimpleContainerType -> SetType");
     }
 | ListType
     {
-      console.log("SimpleContainerType -> ListType");
+      util.debug_log("SimpleContainerType -> ListType");
       $$ = $1;
     }
     ;
@@ -715,7 +715,7 @@ SimpleContainerType:
 MapType:
   tok_map CppType '<' FieldType ',' FieldType '>'
     {
-      console.log("MapType -> tok_map <FieldType, FieldType>");
+      util.debug_log("MapType -> tok_map <FieldType, FieldType>");
       $$ = new t_map($4, $6);
     }
     ;
@@ -723,14 +723,14 @@ MapType:
 SetType:
   tok_set CppType '<' FieldType '>'
     {
-      console.log("SetType -> tok_set<FieldType>");
+      util.debug_log("SetType -> tok_set<FieldType>");
     }
     ;
 
 ListType:
   tok_list '<' FieldType '>' CppType
     {
-      console.log("ListType -> tok_list<FieldType>");
+      util.debug_log("ListType -> tok_list<FieldType>");
       $$ = new t_list($3);
     }
     ;
@@ -749,7 +749,7 @@ CppType:
 TypeAnnotations:
   '(' TypeAnnotationList ')'
     {
-      console.log("TypeAnnotations -> ( TypeAnnotationList )");
+      util.debug_log("TypeAnnotations -> ( TypeAnnotationList )");
     }
 |
     {
@@ -759,7 +759,7 @@ TypeAnnotations:
 TypeAnnotationList:
   TypeAnnotationList TypeAnnotation
     {
-      console.log("TypeAnnotationList -> TypeAnnotationList , TypeAnnotation");
+      util.debug_log("TypeAnnotationList -> TypeAnnotationList , TypeAnnotation");
     }
 |
     {
@@ -769,7 +769,7 @@ TypeAnnotationList:
 TypeAnnotation:
   tok_identifier '=' tok_literal CommaOrSemicolonOptional
     {
-      console.log("TypeAnnotation -> tok_identifier = tok_literal");
+      util.debug_log("TypeAnnotation -> tok_identifier = tok_literal");
     }
     ;
 

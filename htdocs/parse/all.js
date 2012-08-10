@@ -35,6 +35,12 @@ util.implement = function(fn, obj, overwrite) {
 	}
     }
 };
+util.log_level = 0;
+util.debug_log = function(message) {
+    if (util.log_level && typeof(console) !== "undefined") {
+	console.log(message);
+    }
+};
 
 // T_CONST_VALUE
 
