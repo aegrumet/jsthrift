@@ -1,0 +1,19 @@
+<html>
+<head>
+<script>
+module = {};
+</script>
+</head>
+<body>
+
+<script src="thriftweb.js"></script>
+<script src="idljs/ThriftTest.thrift.js"></script>
+<script src="parse/all.js"></script>
+
+<script>
+  thriftweb.yy = module.exports;
+  thriftweb.parse(thriftTest);
+  console.log(thriftweb.yy.g_program.get_services());
+</script>
+</body>
+</html>
