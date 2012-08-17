@@ -122,6 +122,9 @@ struct OneField {
   1: EmptyStruct field
 }
 
+/**
+ * This is a test service.
+ */
 service ThriftTest
 {
   /**
@@ -179,7 +182,7 @@ service ThriftTest
   Xtruct2      testNest(1: Xtruct2 thing),
  
   /**
-   * Prints 'testMap("{%s")' where thing has been formatted into a string of  'key => value' pairs
+   * Prints 'testMap("{%s}")' where thing has been formatted into a string of  'key => value' pairs
    *  seperated by commas and new lines
    * @param map<i32,i32> thing - the map<i32,i32> to print
    * @return map<i32,i32> - returns the map<i32,i32> 'thing'
@@ -254,7 +257,7 @@ service ThriftTest
    * @param Numberz arg4 - 
    * @param UserId arg5 - 
    * @return Xtruct - returns an Xtruct with string_thing = "Hello2, byte_thing = arg0, i32_thing = arg1
-   *    and i64_thing = arg2
+   *    and i64_thing = arg2"
    */
   Xtruct testMulti(1: byte arg0, 2: i32 arg1, 3: i64 arg2, 4: map<i16, string> arg3, 5: Numberz arg4, 6: UserId arg5),
 

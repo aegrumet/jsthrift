@@ -13,7 +13,8 @@ grammar.lex = require("jison/jisonlex").parse(lex);
 
 var Parser = require("jison").Parser;
 var parser = new Parser(grammar);
-parser.yy = require(IO.join(IO.cwd(),"htdocs/parse/all.js"));
+var yy = require(IO.join(IO.cwd(),"htdocs/parse/all.js"));
+parser.yy = yy;
 
 util.log_level = 1;
 util.debug_log("raw length: "+raw.length);
@@ -21,7 +22,3 @@ util.debug_log("lex length: "+lex.length);
 
 var input = IO.read(IO.join(IO.cwd(),'idl/ThriftTest.thrift'));
 parser.parse(input);
-
-
-
-

@@ -40,9 +40,15 @@ Program:
     }
     ;
 
+
+/*  utility   */
+
+
 CaptureDocText:
     {
       util.debug_log("CaptureDocText");
+      $$ = g_doctext;
+      g_doctext = null;
     }
     ;
 
@@ -52,18 +58,20 @@ DestroyDocText:
     }
     ;
 
-/* We have to DestroyDocText here, otherwise it catches the doctext
-   on the first real element. */
+
+/*  headers   */
+
+
 HeaderList:
-  HeaderList Header
+  HeaderList Header DestroyDocText 
     {
       util.debug_log("HeaderList -> HeaderList Header");
     }
-|
+| DestroyDocText 
     {
       util.debug_log("HeaderList -> ");
     }
-    ;
+  ;
 
 Header:
   Include
@@ -73,430 +81,294 @@ Header:
 | tok_namespace tok_identifier tok_identifier
     {
       util.debug_log("Header -> tok_namespace tok_identifier tok_identifier");
-      yy.g_program.set_namespace($2, $3);
     }
 | tok_namespace '*' tok_identifier
     {
       util.debug_log("Header -> tok_namespace * tok_identifier");
-      yy.g_program.set_namespace("*", $3);
     }
-/* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_cpp_namespace tok_identifier
     {
       util.debug_log("Header -> tok_cpp_namespace tok_identifier");
-      yy.g_program.set_namespace("cpp", $2);
     }
 | tok_cpp_include tok_literal
     {
       util.debug_log("Header -> tok_cpp_include tok_literal");
-      yy.g_program.add_cpp_include($2);
     }
 | tok_php_namespace tok_identifier
     {
       util.debug_log("Header -> tok_php_namespace tok_identifier");
-      yy.g_program.set_namespace("php", $2);
     }
-/* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_py_module tok_identifier
     {
       util.debug_log("Header -> tok_py_module tok_identifier");
-      yy.g_program.set_namespace("py", $2);
     }
-/* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_perl_package tok_identifier
     {
       util.debug_log("Header -> tok_perl_namespace tok_identifier");
-      yy.g_program.set_namespace("perl", $2);
     }
-/* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_ruby_namespace tok_identifier
     {
       util.debug_log("Header -> tok_ruby_namespace tok_identifier");
-      yy.g_program.set_namespace("rb", $2);
     }
-/* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_smalltalk_category tok_st_identifier
     {
       util.debug_log("Header -> tok_smalltalk_category tok_st_identifier");
-      yy.g_program.set_namespace("smalltalk.category", $2);
     }
-/* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_smalltalk_prefix tok_identifier
     {
       util.debug_log("Header -> tok_smalltalk_prefix tok_identifier");
-      yy.g_program.set_namespace("smalltalk.prefix", $2);
     }
-/* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_java_package tok_identifier
     {
       util.debug_log("Header -> tok_java_package tok_identifier");
-      yy.g_program.set_namespace("java", $2);
     }
-/* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_cocoa_prefix tok_identifier
     {
       util.debug_log("Header -> tok_cocoa_prefix tok_identifier");
-      yy.g_program.set_namespace("cocoa", $2);
     }
-/* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_xsd_namespace tok_literal
     {
       util.debug_log("Header -> tok_xsd_namespace tok_literal");
-      yy.g_program.set_namespace("xsd", $2);
     }
-/* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
 | tok_csharp_namespace tok_identifier
-   {
+    {
      util.debug_log("Header -> tok_csharp_namespace tok_identifier");
-     yy.g_program.set_namespace("csharp", $2);
-   }
-/* TODO(dreiss): Get rid of this once everyone is using the new hotness. */
+    }
 | tok_delphi_namespace tok_identifier
-   {
+    {
      util.debug_log("Header -> tok_delphi_namespace tok_identifier");
-     yy.g_program.set_namespace("delphi", $2);
-   }
-    ;
+    }
+  ;
 
 Include:
   tok_include tok_literal
     {
       util.debug_log("Include -> tok_include tok_literal");
-      yy.g_program.add_include($2);
     }
-    ;
+  ;
+
+
+/*  definitions   */
+
 
 DefinitionList:
   DefinitionList CaptureDocText Definition
     {
       util.debug_log("DefinitionList -> DefinitionList Definition");
-      if ($2 !== null && $3 !== null) {
-      }
     }
 |
     {
       util.debug_log("DefinitionList -> ");
     }
-    ;
+  ;
 
 Definition:
   Const
     {
       util.debug_log("Definition -> Const");
-      yy.g_program.add_const($1);
-      $$ = 1;
     }
 | TypeDefinition
     {
       util.debug_log("Definition -> TypeDefinition");
-      yy.g_scope.add_type($1.get_name(), $1);
-      $$ = $1;
     }
 | Service
     {
       util.debug_log("Definition -> Service");
-      yy.g_scope.add_service($1.get_name(), $1);
-      yy.g_program.add_service($1);
-      $$ = $1;
     }
-    ;
+  ;
 
-TypeDefinition:
-  Typedef
-    {
-      util.debug_log("TypeDefinition -> Typedef");
-      yy.g_program.add_typedef($1);
-    }
-| Enum
-    {
-      util.debug_log("TypeDefinition -> Enum");
-      yy.g_program.add_enum($1);
-    }
-| Senum
-    {
-      util.debug_log("TypeDefinition -> Senum");
-      yy.g_program.add_typedef($1);
-    }
-| Struct
-    {
-      util.debug_log("TypeDefinition -> Struct");
-      yy.g_program.add_struct($1);
-    }
-| Xception
-    {
-      util.debug_log("TypeDefinition -> Xception");
-      yy.g_program.add_xception($1);
-    }
-    ;
 
-Typedef:
-  tok_typedef FieldType tok_identifier
-    {
-      util.debug_log("TypeDef -> tok_typedef FieldType tok_identifier");
-      var td = new t_typedef(yy.g_program, $2, $3);
-      $$ = td;
-    }
-    ;
-
-CommaOrSemicolonOptional:
-  ','
-    {}
-| ';'
-    {}
-|
-    {}
-    ;
-
-Enum:
-  tok_enum tok_identifier '{' EnumDefList '}'
-    {
-      util.debug_log("Enum -> tok_enum tok_identifier { EnumDefList }");
-      $$ = $4;
-      $$.set_name($2);
-    }
-    ;
-
-EnumDefList:
-  EnumDefList EnumDef
-    {
-      util.debug_log("EnumDefList -> EnumDefList EnumDef");
-      $$ = $1;
-      $$.append($2);
-    }
-|
-    {
-      util.debug_log("EnumDefList -> ");
-      $$ = new t_enum(yy.g_program);
-    }
-    ;
-
-EnumDef:
-  CaptureDocText tok_identifier '=' tok_int_constant CommaOrSemicolonOptional
-    {
-      util.debug_log("EnumDef -> tok_identifier = tok_int_constant");
-      $$ = new t_enum_value($2, $4);
-    }
-|
-  CaptureDocText tok_identifier CommaOrSemicolonOptional
-    {
-      util.debug_log("EnumDef -> tok_identifier");
-      $$ = new t_enum_value($2);
-    }
-    ;
-
-Senum:
-  tok_senum tok_identifier '{' SenumDefList '}'
-    {
-      util.debug_log("Senum -> tok_senum tok_identifier { SenumDefList }");
-      $$ = new t_typedef(yy.g_program, $4, $2);
-    }
-    ;
-
-SenumDefList:
-  SenumDefList SenumDef
-    {
-      util.debug_log("SenumDefList -> SenumDefList SenumDef");
-      $$ = $1;
-      $$.add_string_enum_val($2);
-    }
-|
-    {
-      util.debug_log("SenumDefList -> ");
-      $$ = new t_base_type("string", t_base_type.t_base_name.TYPE_STRING);
-      $$.set_string_enum(true);
-    }
-    ;
-
-SenumDef:
-  tok_literal CommaOrSemicolonOptional
-    {
-      util.debug_log("SenumDef -> tok_literal");
-      $$ = 1;
-    }
-    ;
+/*  definition types   */
 
 Const:
   tok_const FieldType tok_identifier '=' ConstValue CommaOrSemicolonOptional
     {
       util.debug_log("Const -> tok_const FieldType tok_identifier = ConstValue");
-      $$ = new yy.t_const($2, $3, $5);
     }
-    ;
+  ;
 
 ConstValue:
   tok_int_constant
     {
-      $$ = new t_const_value();
-      $$.set_integer($1);
+      util.debug_log("ConstValue -> tok_int_constant");
     }
 | tok_dub_constant
     {
-      $$ = new t_const_value();
-      $$.set_double($1);
+      util.debug_log("ConstValue -> tok_dub_constant");
     }
 | tok_literal
     {
-      util.debug_log("ConstValue => tok_literal");
-      $$ = new t_const_value($1);
+      util.debug_log("ConstValue -> tok_literal");
     }
 | tok_identifier
     {
-      util.debug_log("ConstValue => tok_identifier");
-      $$ = new t_const_value();
-      $$.set_identifier($1);
+      util.debug_log("ConstValue -> tok_identifier");
     }
 | ConstList
     {
-      util.debug_log("ConstValue => ConstList");
-      $$ = $1;
+      util.debug_log("ConstValue -> ConstList");
     }
 | ConstMap
     {
-      util.debug_log("ConstValue => ConstMap");
-      $$ = $1;
+      util.debug_log("ConstValue -> ConstMap");
     }
-    ;
+  ;
 
 ConstList:
   '[' ConstListContents ']'
     {
-      util.debug_log("ConstList => [ ConstListContents ]");
-      $$ = $2;
+      util.debug_log("ConstList -> [ ConstListContents ]");
     }
-    ;
+  ;
 
 ConstListContents:
   ConstListContents ConstValue CommaOrSemicolonOptional
     {
-      util.debug_log("ConstListContents => ConstListContents ConstValue CommaOrSemicolonOptional");
-      $$ = $1;
-      $$.add_list($2);
+      util.debug_log("ConstListContents -> ConstListContents ConstValue CommaOrSemicolonOptional");
     }
 |
     {
-      util.debug_log("ConstListContents =>");
-      $$ = new t_const_value();
-      $$.set_list();
+      util.debug_log("ConstListContents ->");
     }
-    ;
+  ;
 
 ConstMap:
   '{' ConstMapContents '}'
     {
-      util.debug_log("ConstMap => { ConstMapContents }");
-      $$ = $2;
+      util.debug_log("ConstMap -> { ConstMapContents }");
     }
-    ;
+  ;
 
 ConstMapContents:
   ConstMapContents ConstValue ':' ConstValue CommaOrSemicolonOptional
     {
-      util.debug_log("ConstMapContents => ConstMapContents ConstValue CommaOrSemicolonOptional");
-      $$ = $1;
-      $$.add_map($2, $4);
+      util.debug_log("ConstMapContents -> ConstMapContents ConstValue CommaOrSemicolonOptional");
     }
 |
     {
-      util.debug_log("ConstMapContents =>");
-      $$ = new t_const_value();
-      $$.set_map();
+      util.debug_log("ConstMapContents ->");
     }
-    ;
+  ;
+
+
+TypeDefinition:
+  Typedef
+    {
+      util.debug_log("TypeDefinition -> Typedef");
+    }
+| Enum
+    {
+      util.debug_log("TypeDefinition -> Enum");
+    }
+| Senum
+    {
+      util.debug_log("TypeDefinition -> Senum");
+    }
+| Struct
+    {
+      util.debug_log("TypeDefinition -> Struct");
+    }
+| Xception
+    {
+      util.debug_log("TypeDefinition -> Xception");
+    }
+  ;
+
+Typedef:
+  tok_typedef FieldType tok_identifier
+    {
+      util.debug_log("TypeDef -> tok_typedef FieldType tok_identifier");
+    }
+  ;
+
+Enum:
+  tok_enum tok_identifier '{' EnumDefList '}'
+    {
+      util.debug_log("Enum -> tok_enum tok_identifier { EnumDefList }");
+    }
+  ;
+
+EnumDefList:
+  EnumDefList EnumDef
+    {
+      util.debug_log("EnumDefList -> EnumDefList EnumDef");
+    }
+|
+    {
+      util.debug_log("EnumDefList -> ");
+    }
+  ;
+
+EnumDef:
+  CaptureDocText tok_identifier '=' tok_int_constant CommaOrSemicolonOptional
+    {
+      util.debug_log("EnumDef -> tok_identifier = tok_int_constant");
+    }
+|
+  CaptureDocText tok_identifier CommaOrSemicolonOptional
+    {
+      util.debug_log("EnumDef -> tok_identifier");
+    }
+  ;
+
+Senum:
+  tok_senum tok_identifier '{' SenumDefList '}'
+    {
+      util.debug_log("Senum -> tok_senum tok_identifier { SenumDefList }");
+    }
+  ;
+
+SenumDefList:
+  SenumDefList SenumDef
+    {
+      util.debug_log("SenumDefList -> SenumDefList SenumDef");
+    }
+|
+    {
+      util.debug_log("SenumDefList -> ");
+    }
+  ;
+
+SenumDef:
+  tok_literal CommaOrSemicolonOptional
+    {
+      util.debug_log("SenumDef -> tok_literal");
+    }
+  ;
+
 
 StructHead:
   tok_struct
     {
+      util.debug_log("StructHead -> tok_struct");
     }
 | tok_union
     {
+      util.debug_log("StructHead -> tok_union");
     }
-    ;
+  ;
 
 Struct:
   StructHead tok_identifier XsdAll '{' FieldList '}' TypeAnnotations
     {
       util.debug_log("Struct -> tok_struct tok_identifier { FieldList }");
-//      $5.set_xsd_all($3);
-      $$ = $5;
-      $$.set_name($2);
     }
-    ;
+  ;
     
-XsdAll:
-  tok_xsd_all
-    {
-            $$ = true;
-    }
-|
-    {
-            $$ = false;
-    }
-    ;
-
-XsdOptional:
-  tok_xsd_optional
-    {
-            $$ = true;
-    }
-|
-    {
-            $$ = false;
-    }
-    ;
-
-XsdNillable:
-  tok_xsd_nillable
-    {
-            $$ = true;
-    }
-|
-    {
-            $$ = false;
-    }
-    ;
-
-XsdAttributes:
-  tok_xsd_attrs '{' FieldList '}'
-    {
-            $$ = $3;
-    }
-|
-    {
-            $$ = null;
-    }
-    ;
-
 Xception:
   tok_xception tok_identifier '{' FieldList '}'
     {
       util.debug_log("Xception -> tok_xception tok_identifier { FieldList }");
-      $4.set_name($2);
-      $4.set_xception(true);
-      $$ = $4;
     }
-    ;
+  ;
+
 
 Service:
-  tok_service tok_identifier Extends '{' FlagArgs FunctionList UnflagArgs '}'
+  tok_service tok_identifier Extends '{' FunctionList '}'
     {
       util.debug_log("Service -> tok_service tok_identifier { FunctionList }");
-      $$ = $6;
-      $$.set_name($2);
-      $$.set_extends($3);
     }
-    ;
-
-FlagArgs:
-    {
-      util.debug_log("FlagArgs");
-    }
-    ;
-
-UnflagArgs:
-    {
-      util.debug_log("UnflagArgs");
-    }
-    ;
+  ;
 
 Extends:
   tok_extends tok_identifier
@@ -506,39 +378,35 @@ Extends:
 |
     {
     }
-    ;
+  ;
 
 FunctionList:
   FunctionList Function
     {
       util.debug_log("FunctionList -> FunctionList Function");
-      $$ = $1;
-      $1.add_function($2);
     }
 |
     {
       util.debug_log("FunctionList -> ");
-      $$ = new t_service(yy.g_program);
     }
-    ;
+  ;
 
 Function:
-  Oneway FunctionType tok_identifier '(' FieldList ')' Throws CommaOrSemicolonOptional
+  CaptureDocText Oneway FunctionType tok_identifier '(' FieldList ')' Throws CommaOrSemicolonOptional
     {
-            $5.set_name($3 + "_args");
-            $$ = new t_function($2, $3, $5, $7, $1);
+     util.debug_log("Function -> FunctionType tok_identifier (FieldList) ");
     }
-|
-  FunctionType tok_identifier '(' FieldList ')' Throws CommaOrSemicolonOptional
-    ;
+  ;
 
 Oneway:
   tok_oneway
     {
-      util.debug_log("Oneway");
-      $$ = true;
+      util.debug_log("Oneway -> tok_oneway");
     }
-    ;
+|
+    {
+    }
+  ;
 
 Throws:
   tok_throws '(' FieldList ')'
@@ -548,78 +416,70 @@ Throws:
 |
     {
     }
-    ;
+  ;
 
 FieldList:
   FieldList Field
     {
-      util.debug_log("FieldList -> FieldList , Field");
-      $$ = $1;
-      $$.append($2);
+      util.debug_log("FieldList -> FieldList Field");
     }
 |
     {
       util.debug_log("FieldList -> ");
-      $$ = new t_struct(yy.g_program);
     }
-    ;
+  ;
 
 Field:
   CaptureDocText FieldIdentifier FieldRequiredness FieldType tok_identifier FieldValue XsdOptional XsdNillable XsdAttributes TypeAnnotations CommaOrSemicolonOptional
     {
-      util.debug_log("tok_int_constant : Field -> FieldType tok_identifier");
-      util.debug_log("field value literal " + $6);
-      util.debug_log("yy.lval: "+yy.lval);
-      $$ = new t_field($4, $5, $2.value);
-      $$.set_req($3);
+      util.debug_log("Field -> FieldIdentifier FieldRequiredness FieldType tok_identifier FieldValue XsdOptional XsdNillable XsdAttributes TypeAnnotations CommaOrSemicolonOptional");
     }
-    ;
+  ;
 
 FieldIdentifier:
   tok_int_constant ':'
     {
-            $$.value = $1;
+      util.debug_log("FieldIdentifier -> tok_int_constant");
     }
 |
     {
-            $$.value = $1;
+      util.debug_log("FieldIdentifier -> ");
     }
-    ;
+  ;
 
 FieldRequiredness:
   tok_required
     {
+      util.debug_log("FieldRequiredness -> tok_required");
     }
 | tok_optional
     {
+      util.debug_log("FieldRequiredness -> tok_optional");
     }
 |
     {
     }
-    ;
+  ;
 
 FieldValue:
   '=' ConstValue
     {
-    util.debug_log("Field value with const value " + $2);
-    $$ = $2;
     }
 |
     {
     }
-    ;
+  ;
 
 FunctionType:
   FieldType
     {
       util.debug_log("FunctionType -> FieldType");
-      $$ = $1;
     }
 | tok_void
     {
       util.debug_log("FunctionType -> tok_void");
     }
-    ;
+  ;
 
 FieldType:
   tok_identifier
@@ -629,25 +489,19 @@ FieldType:
 | BaseType
     {
       util.debug_log("FieldType -> BaseType");
-      $$ = $1;
     }
 | ContainerType
     {
       util.debug_log("FieldType -> ContainerType");
-      $$ = $1;
     }
-    ;
+  ;
 
-BaseType: SimpleBaseType TypeAnnotations
+BaseType:
+  SimpleBaseType TypeAnnotations
     {
       util.debug_log("BaseType -> SimpleBaseType TypeAnnotations");
-      if ($2 !== null) {
-          $$ = new t_base_type($1);
-      } else {
-          $$ = $1;
-      }
     }
-    ;
+  ;
 
 SimpleBaseType:
   tok_string
@@ -678,6 +532,7 @@ SimpleBaseType:
     {
       util.debug_log("BaseType -> tok_i32");
     }
+    }
 | tok_i64
     {
       util.debug_log("BaseType -> tok_i64");
@@ -686,20 +541,19 @@ SimpleBaseType:
     {
       util.debug_log("BaseType -> tok_double");
     }
-    ;
+  ;
 
-ContainerType: SimpleContainerType TypeAnnotations
+ContainerType:
+  SimpleContainerType TypeAnnotations
     {
       util.debug_log("ContainerType -> SimpleContainerType TypeAnnotations");
-      $$ = $1;
     }
-    ;
+  ;
 
 SimpleContainerType:
   MapType
     {
       util.debug_log("SimpleContainerType -> MapType");
-      $$ = $1;
     }
 | SetType
     {
@@ -708,43 +562,38 @@ SimpleContainerType:
 | ListType
     {
       util.debug_log("SimpleContainerType -> ListType");
-      $$ = $1;
     }
-    ;
+  ;
 
 MapType:
   tok_map CppType '<' FieldType ',' FieldType '>'
     {
       util.debug_log("MapType -> tok_map <FieldType, FieldType>");
-      $$ = new t_map($4, $6);
     }
-    ;
+  ;
 
 SetType:
   tok_set CppType '<' FieldType '>'
     {
       util.debug_log("SetType -> tok_set<FieldType>");
     }
-    ;
+  ;
 
 ListType:
   tok_list '<' FieldType '>' CppType
     {
       util.debug_log("ListType -> tok_list<FieldType>");
-      $$ = new t_list($3);
     }
-    ;
+  ;
 
 CppType:
   tok_cpp_type tok_literal
     {
-            $$ = $2;
     }
 |
     {
-            $$ = null;
     }
-    ;
+  ;
 
 TypeAnnotations:
   '(' TypeAnnotationList ')'
@@ -754,7 +603,7 @@ TypeAnnotations:
 |
     {
     }
-    ;
+  ;
 
 TypeAnnotationList:
   TypeAnnotationList TypeAnnotation
@@ -764,12 +613,47 @@ TypeAnnotationList:
 |
     {
     }
-    ;
+  ;
 
 TypeAnnotation:
   tok_identifier '=' tok_literal CommaOrSemicolonOptional
     {
       util.debug_log("TypeAnnotation -> tok_identifier = tok_literal");
     }
-    ;
+  ;
+
+/*  misc   */
+
+CommaOrSemicolonOptional:
+  ','
+    {}
+| ';'
+    {}
+|
+    {}
+  ;
+
+XsdAll:
+  tok_xsd_all
+|
+  { }
+  ;
+
+XsdOptional:
+  tok_xsd_optional
+|
+  { }
+  ;
+
+XsdNillable:
+  tok_xsd_nillable
+|
+  { }
+  ;
+
+XsdAttributes:
+  tok_xsd_attrs '{' FieldList '}'
+|
+  { }
+  ;
 
