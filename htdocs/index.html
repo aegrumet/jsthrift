@@ -1,19 +1,36 @@
 <html>
 <head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 <script>
 module = {};
+</script>
+<script src="thriftweb.js"></script>
+<script src="idljs/ThriftTest.thrift.js"></script>
+<script src="parse/all.js"></script>
+<script>
+$(document).ready(function() {
+  thriftweb.yy = module.exports;
+  thriftweb.parse(thriftTest);
+  var s = $("#svc");
+  var services = thriftweb.yy.g_program.get_services();
+  for (var i = 0; i < services.length; i++) {
+    var div = $("<div>");
+    div.html(services[i].get_name() + " - " + services[i].get_doc());
+    var ul = $("<ul>");
+    div.append(ul);
+    s.append(div);
+    var fn = services[i].get_functions();
+    for (var j = 0; j < fn.length; j++) {
+      ul.append($("<li>").html(fn[j].get_name()+ " - " + fn[j].get_doc()));
+    }
+  }
+});
 </script>
 </head>
 <body>
 
-<script src="thriftweb.js"></script>
-<script src="idljs/ThriftTest.thrift.js"></script>
-<script src="parse/all.js"></script>
+<h1>Services</h1>
+<div id="svc"></div>
 
-<script>
-  thriftweb.yy = module.exports;
-  thriftweb.parse(thriftTest);
-  console.log(thriftweb.yy.g_program.get_services());
-</script>
 </body>
 </html>

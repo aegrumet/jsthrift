@@ -120,6 +120,9 @@ thriftTest = '/*\n'+
 '  1: EmptyStruct field\n'+
 '}\n'+
 '\n'+
+'/**\n' +
+' * This is a thrift docstring.\n' +
+' */\n' +
 'service ThriftTest\n'+
 '{\n'+
 '  /**\n'+
