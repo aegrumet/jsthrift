@@ -770,6 +770,9 @@ util.implement(t_const, t_doc.prototype);
 
 // EXPORTS
 
+if (typeof(module) == "undefined") {
+    module = {};
+};
 module.exports = {
     util          : util,
     t_const_value : t_const_value,
@@ -782,4 +785,4 @@ module.exports = {
     t_const       : t_const,
     g_program     : new t_program('/path','name'),
     g_scope       : new t_scope()
-}
+};
