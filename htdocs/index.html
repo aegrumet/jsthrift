@@ -13,36 +13,53 @@ $(document).ready(function() {
     thriftweb.yy = module.exports;
     thriftweb.parse($("#idltext").val());
     var s = $("#svc");
+    s.append($("<div>").html("Services (click to expand)"));
+    var service_list = $("<ul>").addClass("service-list");
     var services = thriftweb.yy.g_program.get_services();
     for (var i = 0; i < services.length; i++) {
-      var div = $("<div>");
-      div.html(services[i].get_name() + " - " + services[i].get_doc());
-      var ul = $("<ul>");
-      div.append(ul);
-      s.append(div);
+      var service = $("<li>");
+      service_list.append(
+        service.addClass("service").html(services[i].get_name() + " - " + services[i].get_doc())
+      );
+      var function_list = $("<ul>").addClass("function-list").hide();
       var fn = services[i].get_functions();
       for (var j = 0; j < fn.length; j++) {
-        ul.append($("<li>").html(fn[j].get_name()+ " - " + fn[j].get_doc()));
+        function_list.append($("<li>").addClass("function").html(fn[j].get_name()+ " - " + fn[j].get_doc()));
       }
+      service.append(function_list);
     }
+
+    s.append(service_list);
+    service_list.on("click","li",function() {
+      $(this).find("ul").slideToggle();
+    });
 
     return false;
   });
 });
-
 </script>
+<style type="text/css">
+</style>
 </head>
 <body>
 
+<div id="column-right" style="float: right; width:50%;">
+  <h1>Parse results</h1>
+  <div id="svc"></div>
+</div><!-- column-right -->
+
+<div id="column-left" style="width: 50%;">
+
 <h1>IDL</h1>
 <form id="idlform">
-<textarea id="idltext" cols="80" rows="25"></textarea>
-<br />
 <input type="submit" id="idlcompile" value="Compile" />
+<input type="button" id="refresh" value="Reload" onclick="document.location.reload(true)" />
+<br />
+<textarea id="idltext" cols="60" rows="25"></textarea>
 </form>
 
-<h1>Services</h1>
-<div id="svc"></div>
+</div><!-- column-left -->
+
 
 </body>
 </html>
