@@ -1,36 +1,57 @@
 <html>
 <head>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script src="http://github.com/janl/mustache.js/raw/master/mustache.js"></script> 
 <script src="thriftweb.js"></script>
 <script src="idljs/ThriftTest.thrift.js"></script>
 <script src="parse/all.js"></script>
 <script>
+
 $(document).ready(function() {
+
   $("#idltext").val(thriftTest);
   $("#idlform").on("submit",function(){
 
     $("#idlcompile").attr("disabled","disabled");
     thriftweb.yy = module.exports;
     thriftweb.parse($("#idltext").val());
-    var s = $("#svc");
-    s.append($("<div>").html("Services (click to expand)"));
-    var service_list = $("<ul>").addClass("service-list");
+    var s = $("#docs");
+
+    var enums_data = [];
+    var enums = thriftweb.yy.g_program.get_enums();
+    for (var i = 0; i < enums.length; i++) {
+      enums_data.push({
+        name: enums[i].get_name(),
+        doc: enums[i].get_doc(),
+      });
+    };
+
+    var template = $("#enums-template").html();
+    var html = Mustache.to_html(template, {enums: enums_data});
+    s.append(html);
+
     var services = thriftweb.yy.g_program.get_services();
+    var services_data = [];
     for (var i = 0; i < services.length; i++) {
-      var service = $("<li>");
-      service_list.append(
-        service.addClass("service").html(services[i].get_name() + " - " + services[i].get_doc())
-      );
-      var function_list = $("<ul>").addClass("function-list").hide();
+      var functions_data = [];
       var fn = services[i].get_functions();
       for (var j = 0; j < fn.length; j++) {
-        function_list.append($("<li>").addClass("function").html(fn[j].get_name()+ " - " + fn[j].get_doc()));
+        functions_data.push({
+          name: fn[j].get_name(),
+          doc: fn[j].get_doc()
+        });
       }
-      service.append(function_list);
+      services_data.push({
+        name: services[i].get_name(),
+        doc: services[i].get_doc(),
+        functions: functions_data
+      });
     }
+    var template = $("#services-template").html();
+    var html = Mustache.to_html(template, {services: services_data});
+    s.append(html);
 
-    s.append(service_list);
-    service_list.on("click","li",function() {
+    $("#services").on("click","li",function() {
       $(this).find("ul").slideToggle();
     });
 
@@ -38,14 +59,30 @@ $(document).ready(function() {
   });
 });
 </script>
-<style type="text/css">
-</style>
 </head>
 <body>
 
+<script id="enums-template" type="text/template">
+<div>Enums</div>
+<ul id="enums" class="enum-list">{{#enums}}
+  <li class="enum"> {{name}} - {{doc}}
+{{/enums}}  </ul>
+</script>
+
+<script id="services-template" type="text/template">
+<div>Services (click to expand)</div>
+<ul id="services" class="service-list">{{#services}}
+  <li class="service"> {{name}} - {{doc}}
+  <ul class="function-list" style="display: none;"> {{#functions}}
+    <li> {{name}} - {{doc}} </li>
+  {{/functions}} </ul>
+  </li>
+{{/services}}  </ul>
+</script>
+
 <div id="column-right" style="float: right; width:50%;">
   <h1>Parse results</h1>
-  <div id="svc"></div>
+  <div id="docs"></div>
 </div><!-- column-right -->
 
 <div id="column-left" style="width: 50%;">
