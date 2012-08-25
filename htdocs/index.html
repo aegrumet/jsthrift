@@ -6,6 +6,11 @@
 <script src="idljs/ThriftTest.thrift.js"></script>
 <script src="parse/all.js"></script>
 <style type="text/css">
+body { font-family: Tahoma, sans-serif; }
+pre { background-color: #dddddd; padding: 6px; }
+h3,h4 { padding-top: 0px; margin-top: 0px; }
+div.definition { border: 1px solid gray; margin: 10px; padding: 10px; }
+div.extends { margin: -0.5em 0 1em 5em }
 table { border: 1px solid grey; border-collapse: collapse; }
 td { border: 1px solid grey; padding: 1px 6px; vertical-align: top; }
 th { border: 1px solid black; background-color: #bbbbbb;
@@ -72,9 +77,11 @@ $(document).ready(function() {
       var functions_data = [];
       var fn = services[i].get_functions();
       for (var j = 0; j < fn.length; j++) {
+        var returntype = fn[j].get_returntype();
         functions_data.push({
-          name: fn[j].get_name(),
-          doc: fn[j].get_doc()
+          fn_name: fn[j].get_name(),
+          fn_doc: fn[j].get_doc(),
+          fn_returntype: typeof(returntype) == "string" ? returntype : (typeof(returntype.get_name) == "function" ? returntype.get_name() : "unknown")
         });
       }
       services_data.push({
@@ -104,6 +111,13 @@ $(document).ready(function() {
     });
     s.append(html);
 
+    /*** SERVICES DETAIL ***/
+    var template = $("#detail-services").html();
+    var html = Mustache.to_html(template, {
+      services: services_data
+    });
+    $("#detail-container").append(html);
+
     return false;
   });
 });
@@ -120,9 +134,9 @@ $(document).ready(function() {
 </tr>
 <tr>
   <td> {{#services}}
-    {{name}}<br />
+    <a href="#Svc_{{name}}">{{name}}</a><br />
     <ul class="function-list"> {{#functions}}
-      <li> {{name}}</li>
+      <li><a href="#Fn_{{name}}_{{fn_name}}">{{fn_name}}</a></li>
     {{/functions}} </ul>
   {{/services}} </td>
   <td> {{#datatypes}}
@@ -133,6 +147,16 @@ $(document).ready(function() {
   {{/consts}} </code></td>
 </tr>
 </table>
+</script>
+
+<script id="detail-services" type="text/template">
+<h2 id="Services">Services</h2>
+{{#services}}
+<h3 id="Svc_{{name}}">Service: {{name}}</h3>
+{{#functions}} <div class="definition"><h4 id="Fn_{{name}}_{{fn_name}}">Function: {{name}}.{{fn_name}}</h4>
+<pre><code>{{fn_returntype}}</code> {{fn_name}}()
+</pre></div> {{/functions}}
+{{/services}}
 </script>
 
 <div id="column-right" style="float: right; width:50%;">
@@ -152,6 +176,7 @@ $(document).ready(function() {
 
 </div><!-- column-left -->
 
+<div id="detail-container" style="clear: both;"></div>
 
 </body>
 </html>
