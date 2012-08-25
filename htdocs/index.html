@@ -5,6 +5,12 @@
 <script src="thriftweb.js"></script>
 <script src="idljs/ThriftTest.thrift.js"></script>
 <script src="parse/all.js"></script>
+<style type="text/css">
+table { border: 1px solid grey; border-collapse: collapse; }
+td { border: 1px solid grey; padding: 1px 6px; vertical-align: top; }
+th { border: 1px solid black; background-color: #bbbbbb;
+     text-align: left; padding: 1px 6px; }
+</style>
 <script>
 
 $(document).ready(function() {
@@ -17,18 +23,48 @@ $(document).ready(function() {
     thriftweb.parse($("#idltext").val());
     var s = $("#docs");
 
-    var enums_data = [];
+    var datatypes_data = [];
+
+    /*** STRUCTS ***/
+
+    var structs = thriftweb.yy.g_program.get_structs();
+    for (var i = 0; i < structs.length; i++) {
+      datatypes_data.push({
+        name: structs[i].get_name(),
+        doc: structs[i].get_doc(),
+      });
+    };
+
+    /*** ENUMS ***/
+
     var enums = thriftweb.yy.g_program.get_enums();
     for (var i = 0; i < enums.length; i++) {
-      enums_data.push({
+      datatypes_data.push({
         name: enums[i].get_name(),
         doc: enums[i].get_doc(),
       });
     };
 
-    var template = $("#enums-template").html();
-    var html = Mustache.to_html(template, {enums: enums_data});
-    s.append(html);
+    /*** EXCEPTIONS ***/
+
+    var xceptions = thriftweb.yy.g_program.get_xceptions();
+    for (var i = 0; i < xceptions.length; i++) {
+      datatypes_data.push({
+        name: xceptions[i].get_name(),
+        doc: xceptions[i].get_doc(),
+      });
+    };
+
+    /*** TYPEDEFS ***/
+
+    var typedefs = thriftweb.yy.g_program.get_typedefs();
+    for (var i = 0; i < typedefs.length; i++) {
+      datatypes_data.push({
+        name: typedefs[i]._symbolic
+      });
+    };
+
+    /*** SERVICES ***/
 
     var services = thriftweb.yy.g_program.get_services();
     var services_data = [];
@@ -47,13 +83,26 @@ $(document).ready(function() {
         functions: functions_data
       });
     }
-    var template = $("#services-template").html();
-    var html = Mustache.to_html(template, {services: services_data});
-    s.append(html);
 
-    $("#services").on("click","li",function() {
-      $(this).find("ul").slideToggle();
+    /*** CONSTS ***/
+
+    var consts_data = [];
+    var consts = thriftweb.yy.g_program.get_consts();
+    for (var i = 0; i < consts.length; i++) {
+      consts_data.push({
+        name: consts[i].get_name(),
+        doc: consts[i].get_doc(),
+      });
+    };
+
+    /*** DOC INDEX ***/
+    var template = $("#doc-index").html();
+    var html = Mustache.to_html(template, {
+      services: services_data,
+      datatypes: datatypes_data,
+      consts: consts_data
     });
+    s.append(html);
 
     return false;
   });
@@ -62,22 +111,28 @@ $(document).ready(function() {
 </head>
 <body>
 
-<script id="enums-template" type="text/template">
-<div>Enums</div>
-<ul id="enums" class="enum-list">{{#enums}}
-  <li class="enum"> {{name}} - {{doc}}
-{{/enums}}  </ul>
-</script>
-
-<script id="services-template" type="text/template">
-<div>Services (click to expand)</div>
-<ul id="services" class="service-list">{{#services}}
-  <li class="service"> {{name}} - {{doc}}
-  <ul class="function-list" style="display: none;"> {{#functions}}
-    <li> {{name}} - {{doc}} </li>
-  {{/functions}} </ul>
-  </li>
-{{/services}}  </ul>
+<script id="doc-index" type="text/template">
+<table>
+<tr>
+ <th>Services</th>
+ <th>Data types</th>
+ <th>Constants</th>
+</tr>
+<tr>
+  <td> {{#services}}
+    {{name}}<br />
+    <ul class="function-list"> {{#functions}}
+      <li> {{name}}</li>
+    {{/functions}} </ul>
+  {{/services}} </td>
+  <td> {{#datatypes}}
+    {{name}} <br />
+  {{/datatypes}} </td>
+  <td> <code>{{#consts}}
+    {{name}} <br />
+  {{/consts}} </code></td>
+</tr>
+</table>
 </script>
 
 <div id="column-right" style="float: right; width:50%;">
