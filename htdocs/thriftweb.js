@@ -492,6 +492,7 @@ case 96:
 break;
 case 97:
       util.debug_log("SimpleContainerType -> SetType");
+      this.$ = $$[$0];
     
 break;
 case 98:
@@ -506,6 +507,7 @@ case 99:
 break;
 case 100:
       util.debug_log("SetType -> tok_set<FieldType>");
+      this.$ = new t_set($$[$0-1]);
     
 break;
 case 101:

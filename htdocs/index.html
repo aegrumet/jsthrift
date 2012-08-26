@@ -18,6 +18,29 @@ th { border: 1px solid black; background-color: #bbbbbb;
 </style>
 <script>
 
+function display_type(typeobj) {
+  var display = "unknown";
+  switch (typeof(typeobj)) {
+    case "string":
+      display = typeobj;
+      break;
+    case "object":
+      if (typeof(typeobj.get_name) == "function" && typeobj.get_name()) {
+        display = typeobj.get_name();
+      } else if (typeof(typeobj.is_container) == "function" && typeobj.is_container()) {
+        if (typeobj.is_map()) {
+          display = "map<"+display_type(typeobj.get_key_type())+","+display_type(typeobj.get_val_type())+">";
+        } else if (typeobj.is_list()) {
+          display = "list<"+display_type(typeobj.get_elem_type())+">";
+        } else if (typeobj.is_set()) {
+          display = "set<"+display_type(typeobj.get_elem_type())+">";
+        };
+      }
+      break;
+  };
+  return display;
+};
+
 $(document).ready(function() {
 
   $("#idltext").val(thriftTest);
@@ -78,10 +101,11 @@ $(document).ready(function() {
       var fn = services[i].get_functions();
       for (var j = 0; j < fn.length; j++) {
         var returntype = fn[j].get_returntype();
+        var display_returntype = display_type(returntype);
         functions_data.push({
           fn_name: fn[j].get_name(),
           fn_doc: fn[j].get_doc(),
-          fn_returntype: typeof(returntype) == "string" ? returntype : (typeof(returntype.get_name) == "function" ? returntype.get_name() : "unknown")
+          fn_returntype: display_returntype
         });
       }
       services_data.push({

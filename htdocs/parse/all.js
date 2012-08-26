@@ -608,7 +608,7 @@ t_container.prototype.get_cpp_name = function() {
 t_container.prototype.is_container = function() {
     return true;
 };
-util.implement(t_function, t_type.prototype);
+util.implement(t_container, t_type.prototype);
 
 // T_SERVICE
 

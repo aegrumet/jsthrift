@@ -659,6 +659,7 @@ SimpleContainerType:
 | SetType
     {
       util.debug_log("SimpleContainerType -> SetType");
+      $$ = $1;
     }
 | ListType
     {
@@ -679,6 +680,7 @@ SetType:
   tok_set CppType '<' FieldType '>'
     {
       util.debug_log("SetType -> tok_set<FieldType>");
+      $$ = new t_set($4);
     }
   ;
 
