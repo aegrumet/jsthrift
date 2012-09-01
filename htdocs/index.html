@@ -29,7 +29,7 @@ function display_type(typeobj) {
         display = typeobj.get_name();
       } else if (typeof(typeobj.is_container) == "function" && typeobj.is_container()) {
         if (typeobj.is_map()) {
-          display = "map<"+display_type(typeobj.get_key_type())+","+display_type(typeobj.get_val_type())+">";
+          display = "map<"+display_type(typeobj.get_key_type())+", "+display_type(typeobj.get_val_type())+">";
         } else if (typeobj.is_list()) {
           display = "list<"+display_type(typeobj.get_elem_type())+">";
         } else if (typeobj.is_set()) {
@@ -102,10 +102,21 @@ $(document).ready(function() {
       for (var j = 0; j < fn.length; j++) {
         var returntype = fn[j].get_returntype();
         var display_returntype = display_type(returntype);
+        var display_arglist = [];
+        var arglist = fn[j].get_arglist().get_sorted_members();
+        for (var k = 0; k < arglist.length; k++) {
+           display_arglist.push(display_type(arglist[k].get_type()) + " " + arglist[k].get_name());
+        };
+        var pad_length = fn[j].get_name().length + display_returntype.length + 2;
+        var pad_space = "";
+        for (var l = 0; l < pad_length; l++) {
+            pad_space += " ";
+        };
         functions_data.push({
           fn_name: fn[j].get_name(),
           fn_doc: fn[j].get_doc(),
-          fn_returntype: display_returntype
+          fn_returntype: display_returntype,
+          fn_arglist: display_arglist.join(",\n"+pad_space)
         });
       }
       services_data.push({
@@ -178,7 +189,7 @@ $(document).ready(function() {
 {{#services}}
 <h3 id="Svc_{{name}}">Service: {{name}}</h3>
 {{#functions}} <div class="definition"><h4 id="Fn_{{name}}_{{fn_name}}">Function: {{name}}.{{fn_name}}</h4>
-<pre><code>{{fn_returntype}}</code> {{fn_name}}()
+<pre><code>{{fn_returntype}}</code> {{fn_name}}({{fn_arglist}})
 </pre></div> {{/functions}}
 {{/services}}
 </script>

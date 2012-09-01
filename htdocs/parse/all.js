@@ -372,7 +372,7 @@ t_field = function(type, name, key) {
     this._type = type;
     this._name = name;
     if (arguments.length > 2) {
-	this._key = key;
+	this._key = parseInt(key);
     } else {
 	this._key = 0;
     }
@@ -438,16 +438,55 @@ util.implement(t_field, t_doc.prototype);
 t_struct = function(program, name) {
     t_type.call(this, program, name);
     this._members = [];
-    this._members_in_id_order = null;
+    this._members_in_id_order = [];
     this._is_xception = false;
     this._is_union = false;
     this._xsd_all = false;
 };
-t_struct.prototype.append = function(elem) {
-    this._members.push(elem);
-};
 t_struct.prototype.set_xception = function(is_xception) {
     this._is_xception = is_xception;
+};
+t_struct.prototype.set_union = function(is_union) {
+    this._is_xception = is_union;
+};
+t_struct.prototype.set_xsd_all = function(xsd_all) {
+    this._xsd_all = xsd_all;
+};
+t_struct.prototype.get_xsd_all = function() {
+    return this._xsd_all;
+};
+t_struct.prototype.append = function(elem) {
+    this._members.push(elem);
+    var offset = -1;
+    for (var i = 0; i < this._members_in_id_order.length; i++) {
+	if (elem.get_key() < this._members_in_id_order[i].get_key()) {
+	    break;
+        };
+	offset = i;
+    };
+    offset++;
+    this._members_in_id_order.splice(offset,0,elem);
+};
+t_struct.prototype.get_members = function() {
+    return this._members;
+};
+t_struct.prototype.get_sorted_members = function() {
+    return this._members_in_id_order;
+};
+t_struct.prototype.is_struct = function() {
+    return !this._is_xception;
+};
+t_struct.prototype.is_xception = function() {
+    return this._is_xception;
+};
+t_struct.prototype.is_union = function() {
+    return this._is_union;
+};
+t_struct.prototype.get_fingerprint_material = function() {
+    //STUB
+};
+t_struct.prototype.generate_fingerprint = function() {
+    //STUB
 };
 util.implement(t_struct, t_type.prototype);
 
