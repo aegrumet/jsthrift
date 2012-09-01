@@ -516,7 +516,7 @@ Field:
   CaptureDocText FieldIdentifier FieldRequiredness FieldType tok_identifier FieldValue XsdOptional XsdNillable XsdAttributes TypeAnnotations CommaOrSemicolonOptional
     {
       util.debug_log("Field -> FieldIdentifier FieldRequiredness FieldType tok_identifier FieldValue XsdOptional XsdNillable XsdAttributes TypeAnnotations CommaOrSemicolonOptional");
-      $$ = new t_field($4, $5, $2.value);
+      $$ = new t_field($4, $5, $2);
       $$.set_req($3);
       if ($1 != null) {
         $$.set_doc($1);
@@ -528,12 +528,10 @@ FieldIdentifier:
   tok_int_constant ':'
     {
       util.debug_log("FieldIdentifier -> tok_int_constant");
-      $$.value = $1;
     }
 |
     {
       util.debug_log("FieldIdentifier -> ");
-      $$.value = $1;
     }
   ;
 

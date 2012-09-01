@@ -377,7 +377,7 @@ case 71:
 break;
 case 72:
       util.debug_log("Field -> FieldIdentifier FieldRequiredness FieldType tok_identifier FieldValue XsdOptional XsdNillable XsdAttributes TypeAnnotations CommaOrSemicolonOptional");
-      this.$ = new t_field($$[$0-7], $$[$0-6], $$[$0-9].value);
+      this.$ = new t_field($$[$0-7], $$[$0-6], $$[$0-9]);
       this.$.set_req($$[$0-8]);
       if ($$[$0-10] != null) {
         this.$.set_doc($$[$0-10]);
@@ -386,12 +386,10 @@ case 72:
 break;
 case 73:
       util.debug_log("FieldIdentifier -> tok_int_constant");
-      this.$.value = $$[$0-1];
     
 break;
 case 74:
       util.debug_log("FieldIdentifier -> ");
-      this.$.value = $$[$0];
     
 break;
 case 75:
