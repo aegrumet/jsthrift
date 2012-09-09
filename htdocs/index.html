@@ -22,18 +22,22 @@ function display_type(typeobj) {
   var display = "unknown";
   switch (typeof(typeobj)) {
     case "string":
-      display = typeobj;
+      if (typeobj != "void") {
+        display = "<a href='#Struct_" + typeobj + "'>" + typeobj + "</a>";
+      } else {
+        display = typeobj;
+      };
       break;
     case "object":
       if (typeof(typeobj.get_name) == "function" && typeobj.get_name()) {
         display = typeobj.get_name();
       } else if (typeof(typeobj.is_container) == "function" && typeobj.is_container()) {
         if (typeobj.is_map()) {
-          display = "map<"+display_type(typeobj.get_key_type())+", "+display_type(typeobj.get_val_type())+">";
+          display = "map&lt;"+display_type(typeobj.get_key_type())+", "+display_type(typeobj.get_val_type())+"&gt;";
         } else if (typeobj.is_list()) {
-          display = "list<"+display_type(typeobj.get_elem_type())+">";
+          display = "list&lt;"+display_type(typeobj.get_elem_type())+"&gt;";
         } else if (typeobj.is_set()) {
-          display = "set<"+display_type(typeobj.get_elem_type())+">";
+          display = "set&lt;"+display_type(typeobj.get_elem_type())+"&gt;";
         };
       }
       break;
@@ -121,7 +125,8 @@ $(document).ready(function() {
         for (var k = 0; k < arglist.length; k++) {
            display_arglist.push(display_type(arglist[k].get_type()) + " " + arglist[k].get_name());
         };
-        var pad_length = fn[j].get_name().length + display_returntype.length + 2;
+        var display_returntype_no_html = display_returntype.replace(/<a href=(['"])[^\1]*\1>([^<]+)<\/a>/gi, function(str,group1, group2) { return group2; }); /* " highlighting hack */
+        var pad_length = fn[j].get_name().length + display_returntype_no_html.length + 2;
         var pad_space = "";
         for (var l = 0; l < pad_length; l++) {
             pad_space += " ";
@@ -211,7 +216,7 @@ $(document).ready(function() {
 <div class="definition"><h3 id="Struct_{{name}}">Struct: {{name}}</h3>
 <table><tbody><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr>
 {{#members}}
-<tr><td>{{key}}</td><td>{{name}}</td><td><code>{{type}}</code></td><td></td><td>{{req}}</td><td></td></tr>
+<tr><td>{{key}}</td><td>{{name}}</td><td><code>{{{type}}}</code></td><td></td><td>{{req}}</td><td></td></tr>
 {{/members}}
 </tbody></table><br></div>
 {{/datatypes}}
@@ -222,7 +227,7 @@ $(document).ready(function() {
 {{#services}}
 <h3 id="Svc_{{name}}">Service: {{name}}</h3>
 {{#functions}} <div class="definition"><h4 id="Fn_{{name}}_{{fn_name}}">Function: {{name}}.{{fn_name}}</h4>
-<pre><code>{{fn_returntype}}</code> {{fn_name}}({{fn_arglist}})
+<pre><code>{{{fn_returntype}}}</code> {{fn_name}}({{{fn_arglist}}})
 </pre></div> {{/functions}}
 {{/services}}
 </script>
