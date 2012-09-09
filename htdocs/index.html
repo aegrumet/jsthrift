@@ -57,9 +57,20 @@ $(document).ready(function() {
 
     var structs = thriftweb.yy.g_program.get_structs();
     for (var i = 0; i < structs.length; i++) {
+      var members = structs[i].get_members();
+      var members_data = [];
+      for (var j = 0; j < members.length; j++) {
+        members_data.push({
+          name: members[j].get_name(),
+          key:  members[j].get_key(),
+          type: display_type(members[j].get_type()),
+          req: members[j].get_req()?members[j].get_req() : "default"
+        });
+      };
       datatypes_data.push({
         name: structs[i].get_name(),
         doc: structs[i].get_doc(),
+        members: members_data
       });
     };
 
@@ -70,6 +81,7 @@ $(document).ready(function() {
       datatypes_data.push({
         name: enums[i].get_name(),
         doc: enums[i].get_doc(),
+        members: []
       });
     };
 
@@ -80,6 +92,7 @@ $(document).ready(function() {
       datatypes_data.push({
         name: xceptions[i].get_name(),
         doc: xceptions[i].get_doc(),
+        members: []
       });
     };
 
@@ -88,7 +101,8 @@ $(document).ready(function() {
     var typedefs = thriftweb.yy.g_program.get_typedefs();
     for (var i = 0; i < typedefs.length; i++) {
       datatypes_data.push({
-        name: typedefs[i]._symbolic
+        name: typedefs[i]._symbolic,
+        members: []
       });
     };
 
@@ -146,6 +160,13 @@ $(document).ready(function() {
     });
     s.append(html);
 
+    /*** DATA TYPES DETAIL ***/
+    var template = $("#detail-datastructures").html();
+    var html = Mustache.to_html(template, {
+      datatypes: datatypes_data
+    });
+    $("#detail-container").append(html);
+
     /*** SERVICES DETAIL ***/
     var template = $("#detail-services").html();
     var html = Mustache.to_html(template, {
@@ -175,13 +196,25 @@ $(document).ready(function() {
     {{/functions}} </ul>
   {{/services}} </td>
   <td> {{#datatypes}}
-    {{name}} <br />
+    <a href="#Struct_{{name}}">{{name}}</a> <br />
   {{/datatypes}} </td>
   <td> <code>{{#consts}}
     {{name}} <br />
   {{/consts}} </code></td>
 </tr>
 </table>
+</script>
+
+<script id="detail-datastructures" type="text/template">
+<h2 id="Structs">Data structures</h2>
+{{#datatypes}}
+<div class="definition"><h3 id="Struct_{{name}}">Struct: {{name}}</h3>
+<table><tbody><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr>
+{{#members}}
+<tr><td>{{key}}</td><td>{{name}}</td><td><code>{{type}}</code></td><td></td><td>{{req}}</td><td></td></tr>
+{{/members}}
+</tbody></table><br></div>
+{{/datatypes}}
 </script>
 
 <script id="detail-services" type="text/template">
