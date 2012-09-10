@@ -16,9 +16,9 @@ var parser = new Parser(grammar);
 var yy = require(IO.join(IO.cwd(),"htdocs/parse/all.js"));
 parser.yy = yy;
 
-util.log_level = 1;
-util.debug_log("raw length: "+raw.length);
-util.debug_log("lex length: "+lex.length);
+yy.util.log_level = 1;
+yy.util.debug_log("raw length: "+raw.length);
+yy.util.debug_log("lex length: "+lex.length);
 
 var input = IO.read(IO.join(IO.cwd(),'idl/ThriftTest.thrift'));
 parser.parse(input);

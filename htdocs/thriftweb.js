@@ -10,114 +10,114 @@ performAction: function anonymous(yytext,yyleng,yylineno,yy,yystate,$$,_$) {
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-      util.debug_log("Program -> Headers DefinitionList");
+      yy.util.debug_log("Program -> Headers DefinitionList");
     
 break;
 case 2:
-      util.debug_log("CaptureDocText");
+      yy.util.debug_log("CaptureDocText");
       this.$ = g_doctext;
       g_doctext = null;
     
 break;
 case 3:
-      util.debug_log("DestroyDocText");
+      yy.util.debug_log("DestroyDocText");
       g_doctext = null;
     
 break;
 case 4:
-      util.debug_log("HeaderList -> HeaderList Header");
+      yy.util.debug_log("HeaderList -> HeaderList Header");
     
 break;
 case 5:
-      util.debug_log("HeaderList -> ");
+      yy.util.debug_log("HeaderList -> ");
     
 break;
 case 6:
-      util.debug_log("Header -> Include");
+      yy.util.debug_log("Header -> Include");
     
 break;
 case 7:
-      util.debug_log("Header -> tok_namespace tok_identifier tok_identifier");
+      yy.util.debug_log("Header -> tok_namespace tok_identifier tok_identifier");
       yy.g_program.set_namespace($$[$0-1], $$[$0]);
     
 break;
 case 8:
-      util.debug_log("Header -> tok_namespace * tok_identifier");
+      yy.util.debug_log("Header -> tok_namespace * tok_identifier");
       yy.g_program.set_namespace("*", $$[$0]);
     
 break;
 case 9:
-      util.debug_log("Header -> tok_cpp_namespace tok_identifier");
+      yy.util.debug_log("Header -> tok_cpp_namespace tok_identifier");
       yy.g_program.set_namespace("cpp", $$[$0]);
     
 break;
 case 10:
-      util.debug_log("Header -> tok_cpp_include tok_literal");
+      yy.util.debug_log("Header -> tok_cpp_include tok_literal");
       yy.g_program.add_cpp_include($$[$0]);
     
 break;
 case 11:
-      util.debug_log("Header -> tok_php_namespace tok_identifier");
+      yy.util.debug_log("Header -> tok_php_namespace tok_identifier");
       yy.g_program.set_namespace("php", $$[$0]);
     
 break;
 case 12:
-      util.debug_log("Header -> tok_py_module tok_identifier");
+      yy.util.debug_log("Header -> tok_py_module tok_identifier");
       yy.g_program.set_namespace("py", $$[$0]);
     
 break;
 case 13:
-      util.debug_log("Header -> tok_perl_namespace tok_identifier");
+      yy.util.debug_log("Header -> tok_perl_namespace tok_identifier");
       yy.g_program.set_namespace("perl", $$[$0]);
     
 break;
 case 14:
-      util.debug_log("Header -> tok_ruby_namespace tok_identifier");
+      yy.util.debug_log("Header -> tok_ruby_namespace tok_identifier");
       yy.g_program.set_namespace("rb", $$[$0]);
     
 break;
 case 15:
-      util.debug_log("Header -> tok_smalltalk_category tok_st_identifier");
+      yy.util.debug_log("Header -> tok_smalltalk_category tok_st_identifier");
       yy.g_program.set_namespace("smalltalk.category", $$[$0]);
     
 break;
 case 16:
-      util.debug_log("Header -> tok_smalltalk_prefix tok_identifier");
+      yy.util.debug_log("Header -> tok_smalltalk_prefix tok_identifier");
       yy.g_program.set_namespace("smalltalk.prefix", $$[$0]);
     
 break;
 case 17:
-      util.debug_log("Header -> tok_java_package tok_identifier");
+      yy.util.debug_log("Header -> tok_java_package tok_identifier");
       yy.g_program.set_namespace("java", $$[$0]);
     
 break;
 case 18:
-      util.debug_log("Header -> tok_cocoa_prefix tok_identifier");
+      yy.util.debug_log("Header -> tok_cocoa_prefix tok_identifier");
       yy.g_program.set_namespace("cocoa", $$[$0]);
     
 break;
 case 19:
-      util.debug_log("Header -> tok_xsd_namespace tok_literal");
+      yy.util.debug_log("Header -> tok_xsd_namespace tok_literal");
       yy.g_program.set_namespace("xsd", $$[$0]);
     
 break;
 case 20:
-     util.debug_log("Header -> tok_csharp_namespace tok_identifier");
+     yy.util.debug_log("Header -> tok_csharp_namespace tok_identifier");
      yy.g_program.set_namespace("csharp", $$[$0]);
     
 break;
 case 21:
-     util.debug_log("Header -> tok_delphi_namespace tok_identifier");
+     yy.util.debug_log("Header -> tok_delphi_namespace tok_identifier");
      yy.g_program.set_namespace("delphi", $$[$0]);
     
 break;
 case 22:
-      util.debug_log("Include -> tok_include tok_literal");
+      yy.util.debug_log("Include -> tok_include tok_literal");
       yy.g_program.add_include(null,$$[$0]);
     
 break;
 case 23:
-      util.debug_log("DefinitionList -> DefinitionList Definition");
+      yy.util.debug_log("DefinitionList -> DefinitionList Definition");
       if ($$[$0-1] != null && $$[$0] != null) {
         $$[$0].set_doc($$[$0-1]);
       }
@@ -125,232 +125,232 @@ case 23:
     
 break;
 case 24:
-      util.debug_log("DefinitionList -> ");
+      yy.util.debug_log("DefinitionList -> ");
     
 break;
 case 25:
-      util.debug_log("Definition -> Const");
+      yy.util.debug_log("Definition -> Const");
       yy.g_program.add_const($$[$0]);
       this.$ = 1;
     
 break;
 case 26:
-      util.debug_log("Definition -> TypeDefinition");
+      yy.util.debug_log("Definition -> TypeDefinition");
       yy.g_scope.add_type($$[$0].get_name(), $$[$0]);
       this.$ = $$[$0];
     
 break;
 case 27:
-      util.debug_log("Definition -> Service");
+      yy.util.debug_log("Definition -> Service");
       yy.g_scope.add_service($$[$0].get_name(), $$[$0]);
       yy.g_program.add_service($$[$0]);
       this.$ = $$[$0];
     
 break;
 case 28:
-      util.debug_log("Const -> tok_const FieldType tok_identifier = ConstValue");
+      yy.util.debug_log("Const -> tok_const FieldType tok_identifier = ConstValue");
       this.$ = new yy.t_const($$[$0-4], $$[$0-3], $$[$0-1]);
     
 break;
 case 29:
-      util.debug_log("ConstValue -> tok_int_constant");
+      yy.util.debug_log("ConstValue -> tok_int_constant");
     
 break;
 case 30:
-      util.debug_log("ConstValue -> tok_dub_constant");
+      yy.util.debug_log("ConstValue -> tok_dub_constant");
     
 break;
 case 31:
-      util.debug_log("ConstValue -> tok_literal");
+      yy.util.debug_log("ConstValue -> tok_literal");
     
 break;
 case 32:
-      util.debug_log("ConstValue -> tok_identifier");
+      yy.util.debug_log("ConstValue -> tok_identifier");
     
 break;
 case 33:
-      util.debug_log("ConstValue -> ConstList");
+      yy.util.debug_log("ConstValue -> ConstList");
     
 break;
 case 34:
-      util.debug_log("ConstValue -> ConstMap");
+      yy.util.debug_log("ConstValue -> ConstMap");
     
 break;
 case 35:
-      util.debug_log("ConstList -> [ ConstListContents ]");
+      yy.util.debug_log("ConstList -> [ ConstListContents ]");
       this.$ = $$[$0-1];
     
 break;
 case 36:
-      util.debug_log("ConstListContents -> ConstListContents ConstValue CommaOrSemicolonOptional");
+      yy.util.debug_log("ConstListContents -> ConstListContents ConstValue CommaOrSemicolonOptional");
       this.$ = $$[$0-2];
       this.$.add_list($$[$0-1]);
     
 break;
 case 37:
-      util.debug_log("ConstListContents ->");
-      this.$ = new t_const_value();
+      yy.util.debug_log("ConstListContents ->");
+      this.$ = new yy.t_const_value();
       this.$.set_list();
     
 break;
 case 38:
-      util.debug_log("ConstMap -> { ConstMapContents }");
+      yy.util.debug_log("ConstMap -> { ConstMapContents }");
       this.$ = $$[$0-1];
     
 break;
 case 39:
-      util.debug_log("ConstMapContents -> ConstMapContents ConstValue CommaOrSemicolonOptional");
+      yy.util.debug_log("ConstMapContents -> ConstMapContents ConstValue CommaOrSemicolonOptional");
       this.$ = $$[$0-4];
       this.$.add_map($$[$0-3], $$[$0-1]);
     
 break;
 case 40:
-      util.debug_log("ConstMapContents ->");
-      this.$ = new t_const_value();
+      yy.util.debug_log("ConstMapContents ->");
+      this.$ = new yy.t_const_value();
       this.$.set_map();
     
 break;
 case 41:
-      util.debug_log("TypeDefinition -> Typedef");
+      yy.util.debug_log("TypeDefinition -> Typedef");
       yy.g_program.add_typedef($$[$0]);
     
 break;
 case 42:
-      util.debug_log("TypeDefinition -> Enum");
+      yy.util.debug_log("TypeDefinition -> Enum");
       yy.g_program.add_enum($$[$0]);
     
 break;
 case 43:
-      util.debug_log("TypeDefinition -> Senum");
+      yy.util.debug_log("TypeDefinition -> Senum");
       yy.g_program.add_typedef($$[$0]);
     
 break;
 case 44:
-      util.debug_log("TypeDefinition -> Struct");
+      yy.util.debug_log("TypeDefinition -> Struct");
       yy.g_program.add_struct($$[$0]);
     
 break;
 case 45:
-      util.debug_log("TypeDefinition -> Xception");
+      yy.util.debug_log("TypeDefinition -> Xception");
       yy.g_program.add_xception($$[$0]);
     
 break;
 case 46:
-      util.debug_log("TypeDef -> tok_typedef FieldType tok_identifier");
-      this.$ = new t_typedef(yy.g_program, $$[$0-1], $$[$0]);
+      yy.util.debug_log("TypeDef -> tok_typedef FieldType tok_identifier");
+      this.$ = new yy.t_typedef(yy.g_program, $$[$0-1], $$[$0]);
     
 break;
 case 47:
-      util.debug_log("Enum -> tok_enum tok_identifier { EnumDefList }");
+      yy.util.debug_log("Enum -> tok_enum tok_identifier { EnumDefList }");
       this.$ = $$[$0-1];
       this.$.set_name($$[$0-3]);
     
 break;
 case 48:
-      util.debug_log("EnumDefList -> EnumDefList EnumDef");
+      yy.util.debug_log("EnumDefList -> EnumDefList EnumDef");
       this.$ = $$[$0-1];
       this.$.append($$[$0]);
     
 break;
 case 49:
-      util.debug_log("EnumDefList -> ");
-      this.$ = new t_enum(yy.g_program);
+      yy.util.debug_log("EnumDefList -> ");
+      this.$ = new yy.t_enum(yy.g_program);
     
 break;
 case 50:
-      util.debug_log("EnumDef -> tok_identifier = tok_int_constant");
-      this.$ = new t_enum_value($$[$0-3], $$[$0-1]);
+      yy.util.debug_log("EnumDef -> tok_identifier = tok_int_constant");
+      this.$ = new yy.t_enum_value($$[$0-3], $$[$0-1]);
       if ($$[$0-4] != null) {
         this.$.set_doc($$[$0-4]);
       }
     
 break;
 case 51:
-      util.debug_log("EnumDef -> tok_identifier");
-      this.$ = new t_enum_value($$[$0-1]);
+      yy.util.debug_log("EnumDef -> tok_identifier");
+      this.$ = new yy.t_enum_value($$[$0-1]);
       if ($$[$0-2] != null) {
         this.$.set_doc($$[$0-2]);
       }
     
 break;
 case 52:
-      util.debug_log("Senum -> tok_senum tok_identifier { SenumDefList }");
+      yy.util.debug_log("Senum -> tok_senum tok_identifier { SenumDefList }");
     
 break;
 case 53:
-      util.debug_log("SenumDefList -> SenumDefList SenumDef");
+      yy.util.debug_log("SenumDefList -> SenumDefList SenumDef");
       this.$ = $$[$0-1];
       this.$.add_string_enum_val($$[$0]);
     
 break;
 case 54:
-      util.debug_log("SenumDefList -> ");
-      this.$ = new t_base_type("string", t_base_type.t_base_name.TYPE_STRING);
+      yy.util.debug_log("SenumDefList -> ");
+      this.$ = new yy.t_base_type("string", t_base_type.t_base_name.TYPE_STRING);
       this.$.set_string_enum(true);
     
 break;
 case 55:
-      util.debug_log("SenumDef -> tok_literal");
+      yy.util.debug_log("SenumDef -> tok_literal");
       this.$ = 1;
     
 break;
 case 56:
-      util.debug_log("StructHead -> tok_struct");
+      yy.util.debug_log("StructHead -> tok_struct");
     
 break;
 case 57:
-      util.debug_log("StructHead -> tok_union");
+      yy.util.debug_log("StructHead -> tok_union");
     
 break;
 case 58:
-      util.debug_log("Struct -> tok_struct tok_identifier { FieldList }");
+      yy.util.debug_log("Struct -> tok_struct tok_identifier { FieldList }");
       this.$ = $$[$0-2];
       this.$.set_name($$[$0-5]);
     
 break;
 case 59:
-      util.debug_log("Xception -> tok_xception tok_identifier { FieldList }");
+      yy.util.debug_log("Xception -> tok_xception tok_identifier { FieldList }");
       $$[$0-1].set_name($$[$0-3]);
       $$[$0-1].set_xception(true);
       this.$ = $$[$0-1];
     
 break;
 case 60:
-      util.debug_log("Service -> tok_service tok_identifier { FunctionList }");
+      yy.util.debug_log("Service -> tok_service tok_identifier { FunctionList }");
       this.$ = $$[$0-1];
       this.$.set_name($$[$0-4]);
       this.$.set_extends($$[$0-3]);
     
 break;
 case 61:
-      util.debug_log("Extends -> tok_extends tok_identifier");
+      yy.util.debug_log("Extends -> tok_extends tok_identifier");
     
 break;
 case 62:
     
 break;
 case 63:
-      util.debug_log("FunctionList -> FunctionList Function");
+      yy.util.debug_log("FunctionList -> FunctionList Function");
       this.$ = $$[$0-1];
       $$[$0-1].add_function($$[$0]);
     
 break;
 case 64:
-      util.debug_log("FunctionList -> ");
-      this.$ = new t_service(yy.g_program);
+      yy.util.debug_log("FunctionList -> ");
+      this.$ = new yy.t_service(yy.g_program);
     
 break;
 case 65:
-      util.debug_log("Function -> FunctionType tok_identifier (FieldList) ");
+      yy.util.debug_log("Function -> FunctionType tok_identifier (FieldList) ");
       $$[$0-3].set_name($$[$0-5] + "_args");
-      this.$ = new t_function($$[$0-6], $$[$0-5], $$[$0-3], $$[$0-1], $$[$0-7]);
+      this.$ = new yy.t_function($$[$0-6], $$[$0-5], $$[$0-3], $$[$0-1], $$[$0-7]);
       if ($$[$0-8] != null) {
         this.$.set_doc($$[$0-8]);
       }
     
 break;
 case 66:
-      util.debug_log("Oneway -> tok_oneway");
+      yy.util.debug_log("Oneway -> tok_oneway");
       this.$ = true;
     
 break;
@@ -358,26 +358,26 @@ case 67:
     
 break;
 case 68:
-      util.debug_log("Throws -> tok_throws ( FieldList )");
+      yy.util.debug_log("Throws -> tok_throws ( FieldList )");
     
 break;
 case 69:
     
 break;
 case 70:
-      util.debug_log("FieldList -> FieldList Field");
+      yy.util.debug_log("FieldList -> FieldList Field");
       this.$ = $$[$0-1];
       this.$.append($$[$0]);
     
 break;
 case 71:
-      util.debug_log("FieldList -> ");
-      this.$ = new t_struct(yy.g_program);
+      yy.util.debug_log("FieldList -> ");
+      this.$ = new yy.t_struct(yy.g_program);
     
 break;
 case 72:
-      util.debug_log("Field -> FieldIdentifier FieldRequiredness FieldType tok_identifier FieldValue XsdOptional XsdNillable XsdAttributes TypeAnnotations CommaOrSemicolonOptional");
-      this.$ = new t_field($$[$0-7], $$[$0-6], $$[$0-9]);
+      yy.util.debug_log("Field -> FieldIdentifier FieldRequiredness FieldType tok_identifier FieldValue XsdOptional XsdNillable XsdAttributes TypeAnnotations CommaOrSemicolonOptional");
+      this.$ = new yy.t_field($$[$0-7], $$[$0-6], $$[$0-9]);
       this.$.set_req($$[$0-8]);
       if ($$[$0-10] != null) {
         this.$.set_doc($$[$0-10]);
@@ -388,19 +388,19 @@ case 72:
     
 break;
 case 73:
-      util.debug_log("FieldIdentifier -> tok_int_constant");
+      yy.util.debug_log("FieldIdentifier -> tok_int_constant");
     
 break;
 case 74:
-      util.debug_log("FieldIdentifier -> ");
+      yy.util.debug_log("FieldIdentifier -> ");
     
 break;
 case 75:
-      util.debug_log("FieldRequiredness -> tok_required");
+      yy.util.debug_log("FieldRequiredness -> tok_required");
     
 break;
 case 76:
-      util.debug_log("FieldRequiredness -> tok_optional");
+      yy.util.debug_log("FieldRequiredness -> tok_optional");
     
 break;
 case 77:
@@ -414,106 +414,106 @@ case 79:
     
 break;
 case 80:
-      util.debug_log("FunctionType -> FieldType");
+      yy.util.debug_log("FunctionType -> FieldType");
       this.$ = $$[$0];
     
 break;
 case 81:
-      util.debug_log("FunctionType -> tok_void");
+      yy.util.debug_log("FunctionType -> tok_void");
     
 break;
 case 82:
-      util.debug_log("FieldType -> tok_identifier");
+      yy.util.debug_log("FieldType -> tok_identifier");
     
 break;
 case 83:
-      util.debug_log("FieldType -> BaseType");
+      yy.util.debug_log("FieldType -> BaseType");
       this.$ = $$[$0];
     
 break;
 case 84:
-      util.debug_log("FieldType -> ContainerType");
+      yy.util.debug_log("FieldType -> ContainerType");
       this.$ = $$[$0];
     
 break;
 case 85:
-      util.debug_log("BaseType -> SimpleBaseType TypeAnnotations");
+      yy.util.debug_log("BaseType -> SimpleBaseType TypeAnnotations");
       if ($$[$0] !== null) {
-          this.$ = new t_base_type($$[$0-1]);
+          this.$ = new yy.t_base_type($$[$0-1]);
       } else {
           this.$ = $$[$0-1];
       }
     
 break;
 case 86:
-      util.debug_log("BaseType -> tok_string");
+      yy.util.debug_log("BaseType -> tok_string");
     
 break;
 case 87:
-      util.debug_log("BaseType -> tok_binary");
+      yy.util.debug_log("BaseType -> tok_binary");
     
 break;
 case 88:
-      util.debug_log("BaseType -> tok_slist");
+      yy.util.debug_log("BaseType -> tok_slist");
     
 break;
 case 89:
-      util.debug_log("BaseType -> tok_bool");
+      yy.util.debug_log("BaseType -> tok_bool");
     
 break;
 case 90:
-      util.debug_log("BaseType -> tok_byte");
+      yy.util.debug_log("BaseType -> tok_byte");
     
 break;
 case 91:
-      util.debug_log("BaseType -> tok_i16");
+      yy.util.debug_log("BaseType -> tok_i16");
     
 break;
 case 92:
-      util.debug_log("BaseType -> tok_i32");
+      yy.util.debug_log("BaseType -> tok_i32");
     
 break;
 case 93:
-      util.debug_log("BaseType -> tok_i64");
+      yy.util.debug_log("BaseType -> tok_i64");
     
 break;
 case 94:
-      util.debug_log("BaseType -> tok_double");
+      yy.util.debug_log("BaseType -> tok_double");
     
 break;
 case 95:
-      util.debug_log("ContainerType -> SimpleContainerType TypeAnnotations");
+      yy.util.debug_log("ContainerType -> SimpleContainerType TypeAnnotations");
       this.$ = $$[$0-1];
     
 break;
 case 96:
-      util.debug_log("SimpleContainerType -> MapType");
+      yy.util.debug_log("SimpleContainerType -> MapType");
       this.$ = $$[$0];
     
 break;
 case 97:
-      util.debug_log("SimpleContainerType -> SetType");
+      yy.util.debug_log("SimpleContainerType -> SetType");
       this.$ = $$[$0];
     
 break;
 case 98:
-      util.debug_log("SimpleContainerType -> ListType");
+      yy.util.debug_log("SimpleContainerType -> ListType");
       this.$ = $$[$0];
     
 break;
 case 99:
-      util.debug_log("MapType -> tok_map <FieldType, FieldType>");
-      this.$ = new t_map($$[$0-3], $$[$0-1]);
+      yy.util.debug_log("MapType -> tok_map <FieldType, FieldType>");
+      this.$ = new yy.t_map($$[$0-3], $$[$0-1]);
     
 break;
 case 100:
-      util.debug_log("SetType -> tok_set<FieldType>");
-      this.$ = new t_set($$[$0-1]);
+      yy.util.debug_log("SetType -> tok_set<FieldType>");
+      this.$ = new yy.t_set($$[$0-1]);
     
 break;
 case 101:
-      util.debug_log("ListType -> tok_list<FieldType>");
-      this.$ = new t_list($$[$0-2]);
+      yy.util.debug_log("ListType -> tok_list<FieldType>");
+      this.$ = new yy.t_list($$[$0-2]);
     
 break;
 case 102:
@@ -525,21 +525,21 @@ case 103:
     
 break;
 case 104:
-      util.debug_log("TypeAnnotations -> ( TypeAnnotationList )");
+      yy.util.debug_log("TypeAnnotations -> ( TypeAnnotationList )");
     
 break;
 case 105:
     
 break;
 case 106:
-      util.debug_log("TypeAnnotationList -> TypeAnnotationList , TypeAnnotation");
+      yy.util.debug_log("TypeAnnotationList -> TypeAnnotationList , TypeAnnotation");
     
 break;
 case 107:
     
 break;
 case 108:
-      util.debug_log("TypeAnnotation -> tok_identifier = tok_literal");
+      yy.util.debug_log("TypeAnnotation -> tok_identifier = tok_literal");
     
 break;
 case 113: 

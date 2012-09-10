@@ -25,7 +25,9 @@
 
 // UTIL
 
-util = {};
+(function() {
+
+var util = {};
 util.implement = function(fn, obj, overwrite) {
     var proto = fn.prototype;
     for (var k in obj) {
@@ -44,7 +46,7 @@ util.debug_log = function(message) {
 
 // T_CONST_VALUE
 
-t_const_value = function(val) {
+var t_const_value = function(val) {
     this._val = null;
     this._valType = null;
     this._enum = null;
@@ -127,7 +129,7 @@ t_const_value.prototype.get_type = function() {
 
 // T_DOC
 
-t_doc = function() {
+var t_doc = function() {
     this._doc = null;
     this._has_doc = false;
 };
@@ -144,7 +146,7 @@ t_doc.prototype.has_doc = function() {
 
 // T_SCOPE
 
-t_scope = function() {
+var t_scope = function() {
     this._types = {};
     this._constants = {};
     this._services = {};
@@ -176,7 +178,7 @@ t_scope.prototype.resolve_const_value = function(const_val, ttype) {
 
 // T_PROGRAM
 
-t_program = function(path, name) {
+var t_program = function(path, name) {
     this._path = path;
     this._name = name;
     this._out_path = null;
@@ -292,7 +294,7 @@ util.implement(t_program, t_doc.prototype);
 
 // T_TYPE
 
-t_type = function(program, name) {
+var t_type = function(program, name) {
     this._program = program;
     if (arguments.length > 1) {
 	this._name = name;
@@ -368,7 +370,7 @@ util.implement(t_type, t_doc.prototype);
 
 // T_FIELD
 
-t_field = function(type, name, key) {
+var t_field = function(type, name, key) {
     this._type = type;
     this._name = name;
     if (arguments.length > 2) {
@@ -435,7 +437,7 @@ util.implement(t_field, t_doc.prototype);
 
 // T_STRUCT
 
-t_struct = function(program, name) {
+var t_struct = function(program, name) {
     t_type.call(this, program, name);
     this._members = [];
     this._members_in_id_order = [];
@@ -492,7 +494,7 @@ util.implement(t_struct, t_type.prototype);
 
 // T_BASE_TYPE
 
-t_base_type = function(name, base) {
+var t_base_type = function(name, base) {
     t_type.call(this, null, name);
     this._base = base;
     this._string_list = false;
@@ -567,7 +569,7 @@ util.implement(t_base_type, t_type.prototype);
 
 // T_ENUM
 
-t_enum = function(program) {
+var t_enum = function(program) {
     t_type.call(this, program);
     this._constants = [];
 };
@@ -596,7 +598,7 @@ util.implement(t_enum, t_type.prototype);
 
 // T_FUNCTION
 
-t_function = function(returntype, name, arglist) {
+var t_function = function(returntype, name, arglist) {
     this._returntype = returntype;
     this._name = name;
     this._arglist = arglist;
@@ -630,7 +632,7 @@ util.implement(t_function, t_doc.prototype);
 
 // T_CONTAINER
 
-t_container = function() {
+var t_container = function() {
     this._cpp_name = null;
     this._has_cpp_name = false;
 };
@@ -651,7 +653,7 @@ util.implement(t_container, t_type.prototype);
 
 // T_SERVICE
 
-t_service = function(program) {
+var t_service = function(program) {
     t_type.call(this, program);
     this._functions = [];
     this._extends = null;
@@ -679,7 +681,7 @@ util.implement(t_service, t_type.prototype);
 
 // T_TYPEDEF
 
-t_typedef = function(program, type, symbolic) {
+var t_typedef = function(program, type, symbolic) {
     t_type.call(this, program);
     this._type = type;
     this._symbolic = symbolic;
@@ -703,7 +705,7 @@ util.implement(t_typedef, t_type.prototype);
 
 // T_ENUM_VALUE
 
-t_enum_value = function(name, value) {
+var t_enum_value = function(name, value) {
     this._name = name;
     if (arguments.length > 1) {
 	this._value = value;
@@ -730,7 +732,7 @@ util.implement(t_enum_value, t_doc.prototype);
 
 // T_MAP
 
-t_map = function(key_type, val_type) {
+var t_map = function(key_type, val_type) {
     this._key_type = key_type;
     this._val_type = val_type;
 };
@@ -753,7 +755,7 @@ util.implement(t_map, t_container.prototype);
 
 // T_LIST
 
-t_list = function(elem_type) {
+var t_list = function(elem_type) {
     this._elem_type = elem_type;
 };
 t_list.prototype.get_elem_type = function() {
@@ -772,7 +774,7 @@ util.implement(t_list, t_container.prototype);
 
 // T_SET
 
-t_set = function(elem_type) {
+var t_set = function(elem_type) {
     this._elem_type = elem_type;
 };
 t_set.prototype.get_elem_type = function() {
@@ -791,7 +793,7 @@ util.implement(t_set, t_container.prototype);
 
 // T_CONST
 
-t_const = function(type, name, value) {
+var t_const = function(type, name, value) {
     this._type = type;
     this._name = name;
     this._value = value;
@@ -807,7 +809,7 @@ t_const.prototype.get_value = function() {
 };
 util.implement(t_const, t_doc.prototype);
 
-thrift_reserved_keyword = function(yytext) {
+var thrift_reserved_keyword = function(yytext) {
     throw { message: "Illegal use of reserved keyword '" + yytext + "'" };
 };
 
@@ -818,15 +820,27 @@ if (typeof(module) == "undefined") {
 };
 module.exports = {
     util          : util,
+    g_program     : new t_program('/path','name'),
+    g_scope       : new t_scope(),
+    thrift_reserved_keyword: thrift_reserved_keyword,
     t_const_value : t_const_value,
     t_doc         : t_doc,
+    t_scope       : t_scope,
     t_program     : t_program,
     t_type        : t_type,
     t_field       : t_field,
     t_struct      : t_struct,
     t_base_type   : t_base_type,
-    t_const       : t_const,
-    g_program     : new t_program('/path','name'),
-    g_scope       : new t_scope(),
-    thrift_reserved_keyword: thrift_reserved_keyword
+    t_enum        : t_enum,
+    t_function    : t_function,
+    t_container   : t_container,
+    t_service     : t_service,
+    t_typedef     : t_typedef,
+    t_enum_value  : t_enum_value,
+    t_map         : t_map,
+    t_list        : t_list,
+    t_set         : t_set,
+    t_const       : t_const
 };
+
+})();
