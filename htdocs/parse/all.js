@@ -807,6 +807,10 @@ t_const.prototype.get_value = function() {
 };
 util.implement(t_const, t_doc.prototype);
 
+thrift_reserved_keyword = function(yytext) {
+    throw { message: "Illegal use of reserved keyword '" + yytext + "'" };
+};
+
 // EXPORTS
 
 if (typeof(module) == "undefined") {
@@ -823,5 +827,6 @@ module.exports = {
     t_base_type   : t_base_type,
     t_const       : t_const,
     g_program     : new t_program('/path','name'),
-    g_scope       : new t_scope()
+    g_scope       : new t_scope(),
+    thrift_reserved_keyword: thrift_reserved_keyword
 };

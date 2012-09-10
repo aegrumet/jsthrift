@@ -52,7 +52,14 @@ $(document).ready(function() {
 
     $("#idlcompile").attr("disabled","disabled");
     thriftweb.yy = module.exports;
-    thriftweb.parse($("#idltext").val());
+
+    try {
+      thriftweb.parse($("#idltext").val());
+    } catch (e) {
+      alert('Compilation error: '+e.message);
+      return false;
+    };
+
     var s = $("#docs");
 
     var datatypes_data = [];
