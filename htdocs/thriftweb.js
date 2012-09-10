@@ -381,7 +381,10 @@ case 72:
       this.$.set_req($$[$0-8]);
       if ($$[$0-10] != null) {
         this.$.set_doc($$[$0-10]);
-      }
+      };
+      if ($$[$0-5] != null) {
+        this.$.set_value($$[$0-5]);
+      };
     
 break;
 case 73:

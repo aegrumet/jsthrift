@@ -68,7 +68,8 @@ $(document).ready(function() {
           name: members[j].get_name(),
           key:  members[j].get_key(),
           type: display_type(members[j].get_type()),
-          req: members[j].get_req()?members[j].get_req() : "default"
+          req: members[j].get_req()?members[j].get_req() : "default",
+          value: members[j].get_value()
         });
       };
       datatypes_data.push({
@@ -216,7 +217,7 @@ $(document).ready(function() {
 <div class="definition"><h3 id="Struct_{{name}}">Struct: {{name}}</h3>
 <table><tbody><tr><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></tr>
 {{#members}}
-<tr><td>{{key}}</td><td>{{name}}</td><td><code>{{{type}}}</code></td><td></td><td>{{req}}</td><td></td></tr>
+<tr><td>{{key}}</td><td>{{name}}</td><td><code>{{{type}}}</code></td><td></td><td>{{req}}</td><td>{{value}}</td></tr>
 {{/members}}
 </tbody></table><br></div>
 {{/datatypes}}

@@ -520,7 +520,10 @@ Field:
       $$.set_req($3);
       if ($1 != null) {
         $$.set_doc($1);
-      }
+      };
+      if ($6 != null) {
+        $$.set_value($6);
+      };
     }
   ;
 
