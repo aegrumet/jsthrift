@@ -579,6 +579,9 @@ t_enum.prototype.set_name = function(name) {
 t_enum.prototype.append = function(constant) {
     this._constants.push(constant);
 };
+t_enum.prototype.get_constants = function() {
+    return this._constants;
+};
 t_enum.prototype.get_constant_by_name = function(name) {
     //STUB
 };
@@ -592,7 +595,15 @@ t_enum.prototype.get_fingerprint_material = function() {
     return "enum";
 };
 t_enum.prototype.resolve_values = function() {
-    //STUB
+    var enum_values = this.get_constants();
+    var last_value = -1;
+    for (var i = 0; i < enum_values.length; i++) {
+        if (! enum_values[i].has_value()) {
+            enum_values[i].set_value(++last_value);  
+        } else {
+            last_value = enum_values[i].get_value();
+        };
+    };
 };
 util.implement(t_enum, t_type.prototype);
 

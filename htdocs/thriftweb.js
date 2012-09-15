@@ -244,6 +244,7 @@ case 47:
       yy.util.debug_log("Enum -> tok_enum tok_identifier { EnumDefList }");
       this.$ = $$[$0-1];
       this.$.set_name($$[$0-3]);
+      this.$.resolve_values();
     
 break;
 case 48:

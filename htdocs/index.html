@@ -89,11 +89,17 @@ $(document).ready(function() {
     /*** ENUMS ***/
 
     var enums = thriftweb.yy.g_program.get_enums();
+    var enums_data = [];
     for (var i = 0; i < enums.length; i++) {
       datatypes_data.push({
         name: enums[i].get_name(),
         doc: enums[i].get_doc(),
         members: []
+      });
+      enums_data.push({
+        name: enums[i].get_name(),
+        doc: enums[i].get_doc(),
+        constants: enums[i].get_constants()
       });
     };
 
@@ -160,7 +166,9 @@ $(document).ready(function() {
     for (var i = 0; i < consts.length; i++) {
       consts_data.push({
         name: consts[i].get_name(),
-        doc: consts[i].get_doc(),
+        type: consts[i].get_type(),
+        value: consts[i].get_value(),
+        doc: consts[i].get_doc()
       });
     };
 
@@ -172,6 +180,20 @@ $(document).ready(function() {
       consts: consts_data
     });
     s.append(html);
+
+    /*** CONSTS DETAIL ***/
+    var template = $("#detail-constants").html();
+    var html = Mustache.to_html(template, {
+      consts: consts_data
+    });
+    $("#detail-container").append(html);
+
+    /*** ENUMS DETAIL ***/
+    var template = $("#detail-enumerations").html();
+    var html = Mustache.to_html(template, {
+      enums: enums_data
+    });
+    $("#detail-container").append(html);
 
     /*** DATA TYPES DETAIL ***/
     var template = $("#detail-datastructures").html();
@@ -212,10 +234,32 @@ $(document).ready(function() {
     <a href="#Struct_{{name}}">{{name}}</a> <br />
   {{/datatypes}} </td>
   <td> <code>{{#consts}}
-    {{name}} <br />
+    <a href="#Const_{{name}}">{{name}}</a> <br />
   {{/consts}} </code></td>
 </tr>
 </table>
+</script>
+
+<script id="detail-constants" type="text/template">
+<h2 id="Constants">Constants</h2>
+<table><tbody><tr><th>Constant</th><th>Type</th><th>Value</th></tr>
+{{#consts}}
+<tr id="Const_{{name}}"><td><code>{{name}}</code></td><td><code><code>{{type}}</code></code></td><td><code>{{value}}</code></td></tr>
+{{/consts}}
+</tbody></table>
+</script>
+
+<script id="detail-enumerations" type="text/template">
+<h2 id="Enumerations">Enumerations</h2>
+{{#enums}}
+<div class="definition"><h3 id="Enum_{{name}}">Enumeration: {{name}}</h3>
+{{doc}}
+<br><br><table><tbody>
+{{#constants}}
+<tr><td><code>{{get_name}}</code></td><td><code>{{get_value}}</code></td></tr>
+{{/constants}}
+</tbody></table></div>
+{{/enums}}
 </script>
 
 <script id="detail-datastructures" type="text/template">

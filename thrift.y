@@ -332,6 +332,7 @@ Enum:
       yy.util.debug_log("Enum -> tok_enum tok_identifier { EnumDefList }");
       $$ = $4;
       $$.set_name($2);
+      $$.resolve_values();
     }
   ;
 
