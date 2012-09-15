@@ -64,7 +64,7 @@ DestroyDocText:
 
 
 HeaderList:
-  HeaderList Header DestroyDocText 
+  HeaderList Header
     {
       yy.util.debug_log("HeaderList -> HeaderList Header");
     }
