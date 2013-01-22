@@ -52,20 +52,32 @@ function display_type(typeobj) {
 
 $(document).ready(function() {
 
-  $("#idltext").val(thriftTest);
-  $("#idlform").on("submit",function(){
+  var lastKeydownTime = null;
+  var lastCompileTime = null;
 
-    $("#idlcompile").attr("disabled","disabled");
+  $("#idltext").val(thriftTest);
+  $("#idltext").on("keydown", function() {
+    lastKeydownTime = (new Date()).getTime();
+  });
+
+  var compileDocs = function() {
+
+    lastCompileTime = (new Date()).getTime();
+
+//  $("#idlcompile").attr("disabled","disabled");
     thriftweb.yy = module.exports;
+    thriftweb.yy.reset();
+
+    var docs = $("#docs");
+    docs.html("");
+    $("#detail-container").html("");
 
     try {
       thriftweb.parse($("#idltext").val());
     } catch (e) {
-      alert('Compilation error: '+e.message);
+      docs.html('Compilation error: '+e.message);
       return false;
     };
-
-    var s = $("#docs");
 
     var datatypes_data = [];
 
@@ -184,7 +196,7 @@ $(document).ready(function() {
       datatypes: datatypes_data,
       consts: consts_data
     });
-    s.append(html);
+    docs.append(html);
 
     /*** CONSTS DETAIL ***/
     var template = $("#detail-constants").html();
@@ -215,7 +227,21 @@ $(document).ready(function() {
     $("#detail-container").append(html);
 
     return false;
-  });
+  };
+
+  $("#idlform").on("submit", compileDocs);
+
+  compileDocs();
+
+  setInterval(
+    function() {
+      if ( ((new Date()).getTime() - lastKeydownTime) > 1000 && lastKeydownTime > lastCompileTime) {
+        compileDocs();
+      }
+    },
+    500
+  );
+
 });
 </script>
 </head>
@@ -296,10 +322,10 @@ $(document).ready(function() {
 
 <div id="column-left" style="width: 50%;">
 
-<h1>IDL</h1>
+<h1>Thrift Live Compiler</h1>
 <form id="idlform">
-<input type="submit" id="idlcompile" value="Compile" />
-<input type="button" id="refresh" value="Reload" onclick="document.location.reload(true)" />
+<!-- <input type="submit" id="idlcompile" value="Compile" /> -->
+<!-- <input type="button" id="refresh" value="Reload" onclick="document.location.reload(true)" /> -->
 <br />
 <textarea id="idltext" cols="60" rows="25"></textarea>
 </form>

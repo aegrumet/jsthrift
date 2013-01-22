@@ -1,42 +1,4 @@
-thriftTest = '/*\n'+
-' * Licensed to the Apache Software Foundation (ASF) under one\n'+
-' * or more contributor license agreements. See the NOTICE file\n'+
-' * distributed with this work for additional information\n'+
-' * regarding copyright ownership. The ASF licenses this file\n'+
-' * to you under the Apache License, Version 2.0 (the\n'+
-' * "License"); you may not use this file except in compliance\n'+
-' * with the License. You may obtain a copy of the License at\n'+
-' *\n'+
-' *   http://www.apache.org/licenses/LICENSE-2.0\n'+
-' *\n'+
-' * Unless required by applicable law or agreed to in writing,\n'+
-' * software distributed under the License is distributed on an\n'+
-' * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\n'+
-' * KIND, either express or implied. See the License for the\n'+
-' * specific language governing permissions and limitations\n'+
-' * under the License.\n'+
-' *\n'+
-' * Contains some contributions under the Thrift Software License.\n'+
-' * Please see doc/old-thrift-license.txt in the Thrift distribution for\n'+
-' * details.\n'+
-' */\n'+
-'\n'+
-'namespace c_glib TTest\n'+
-'namespace java thrift.test\n'+
-'namespace cpp thrift.test\n'+
-'namespace rb Thrift.Test\n'+
-'namespace perl ThriftTest\n'+
-'namespace csharp Thrift.Test\n'+
-'namespace js ThriftTest\n'+
-'namespace st ThriftTest\n'+
-'namespace py ThriftTest\n'+
-'namespace py.twisted ThriftTest\n'+
-'namespace go ThriftTest\n'+
-'namespace php ThriftTest\n'+
-'namespace delphi Thrift.Test\n'+
-'namespace cocoa ThriftTest\n'+
-'namespace * thrift.test\n'+
-'\n'+
+thriftTest = ''+
 '/**\n'+
 ' * Docstring!\n'+
 ' */\n'+

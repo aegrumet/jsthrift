@@ -50,7 +50,8 @@
         t_list,
         t_set,
         t_const,
-        thrift_reserved_keyword;
+        thrift_reserved_keyword,
+        reset;
 
     util.implement = function (fn, obj, overwrite) {
         var proto = fn.prototype,
@@ -818,7 +819,7 @@
     };
     util.implement(t_list, t_container.prototype);
 
-// T_SET
+    // T_SET
 
     t_set = function (elem_type) {
         this._elem_type = elem_type;
@@ -837,7 +838,7 @@
     };
     util.implement(t_set, t_container.prototype);
 
-// T_CONST
+    // T_CONST
 
     t_const = function (type, name, value) {
         this._type = type;
@@ -857,6 +858,11 @@
 
     thrift_reserved_keyword = function (yytext) {
         throw { message: "Illegal use of reserved keyword '" + yytext + "'" };
+    };
+
+    reset = function() {
+        this.g_program = new t_program('/path', 'name');
+        this.g_scope = new t_scope();
     };
 
     // EXPORTS
@@ -883,7 +889,8 @@
         t_map         : t_map,
         t_list        : t_list,
         t_set         : t_set,
-        t_const       : t_const
+        t_const       : t_const,
+        reset         : reset
     };
 
 }());
